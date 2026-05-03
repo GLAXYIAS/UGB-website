@@ -75,4 +75,3 @@ For pull requests or questions:
 <p align="center">
   <img src="https://capsule-render.vercel.app/api?section=footer&type=waving&color=0:0072ff,100:00c6ff" />
 </p>
-```
