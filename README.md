@@ -10,41 +10,41 @@
 
 ---
 
-## 🚀 About the Project
+## About the Project
 > This is a UBG website fixing the Linewize issue of blocking stuff from `config.jsonc` for redirects.
 
 ---
 
-## ✨ Features
-- ⚡ Super fast  
-- 🔒 Secure  
-- 🎨 Clean UI  
-- 🧠 Smart logic  
+## Features
+- Super fast  
+- Secure  
+- Clean UI  
+- Smart logic  
 
 ---
 
-## 🛠️ Tech Stack
+## Tech Stack
 <p align="center">
   <img src="https://skillicons.dev/icons?i=js,html,css,python,github" />
 </p>
 
 ---
 
-## 📸 Preview
+## Preview
 <p align="center">
   <img src="giphs/bGOrl9.gif" width="500"/>
 </p>
 
 ---
 
-## 📦 Installation
+## Installation
 ```bash
-# No installation needed 😎
+# No installation needed 
 ````
 
 ---
 
-## 📊 Stats
+## Stats
 
 <p align="center">
   <img src="https://github-readme-stats.vercel.app/api?username=GLAXYIAS&show_icons=true&theme=tokyonight&hide_border=true" />
@@ -53,14 +53,14 @@
 
 ---
 
-## 🧩 Contribution
+## Contribution
 
 For pull requests or questions:
 📧 [Sparefornow2026@outlook.com](mailto:Sparefornow2026@outlook.com)
 
 ---
 
-## 🌐 Connect
+## Connect
 
 <p>
   <a href="https://github.com/GLAXYIAS">
