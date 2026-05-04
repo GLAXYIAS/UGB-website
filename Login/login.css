@@ -155,3 +155,26 @@ button:hover {
 .glow {
   text-shadow: 0 0 15px rgba(192, 132, 252, 0.6);
 }
+/* Back Button */
+.back-btn {
+  position: absolute;
+  top: 20px;
+  left: 20px;
+  padding: 10px 18px;
+  background: rgba(255, 255, 255, 0.1);
+  color: #e0e0e0;
+  border: 1px solid #8b00ff;
+  border-radius: 50px;
+  font-size: 15px;
+  cursor: pointer;
+  transition: all 0.3s;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.back-btn:hover {
+  background: #8b00ff;
+  color: white;
+  transform: translateX(-5px);
+}
