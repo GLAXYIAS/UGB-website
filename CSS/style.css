@@ -130,3 +130,55 @@ body {
   font-size: 22px;
   color: #c084fc;
 }
+/* Right Sidebar */
+.right-sidebar {
+  background: #1a1433;
+  border-left: 1px solid #4b2e8a;
+  padding: 25px 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.signin-btn, .settings-btn {
+  width: 100%;
+  padding: 14px 20px;
+  border: none;
+  border-radius: 12px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.signin-btn {
+  background: linear-gradient(90deg, #8b00ff, #c084fc);
+  color: white;
+}
+
+.settings-btn {
+  background: #2a1f4d;
+  color: #c0b0ff;
+  border: 1px solid #6b21a8;
+}
+
+.settings-btn:hover {
+  background: #3b2a66;
+}
+
+/* Random Game under featured */
+.random-section {
+  padding: 0 30px 20px;
+}
+
+.quick-action-btn {
+  width: 100%;
+  padding: 16px 24px;
+  background: linear-gradient(90deg, #6d28d9, #a855f7);
+  border: none;
+  border-radius: 50px;
+  color: white;
+  font-size: 17px;
+  font-weight: 600;
+  cursor: pointer;
+}
