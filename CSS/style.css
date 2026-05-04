@@ -6,109 +6,89 @@
 
 body {
   font-family: 'Inter', system-ui, sans-serif;
-  background: linear-gradient(135deg, #0c001f, #1a0033);
+  background: #0f0a1f;
   color: #e0e0ff;
   min-height: 100vh;
-  overflow-x: hidden;
 }
 
 .dashboard {
   display: grid;
-  grid-template-columns: 260px 1fr 280px;
+  grid-template-columns: 220px 1fr 280px;   /* Left sidebar now smaller */
   min-height: 100vh;
 }
 
-/* ==================== LEFT NAV ==================== */
+/* Left Sidebar - Smaller */
 .left-nav {
-  background: rgba(15, 10, 45, 0.98);
-  border-right: 1px solid rgba(140, 0, 255, 0.25);
-  padding: 30px 20px;
-  display: flex;
-  flex-direction: column;
+  background: #1a1433;
+  border-right: 1px solid #4b2e8a;
+  padding: 25px 15px;
 }
 
 .logo {
-  font-size: 32px;
+  font-size: 28px;
   font-weight: 900;
-  margin-bottom: 50px;
+  margin-bottom: 40px;
   color: #c084fc;
+  padding-left: 10px;
 }
 
 .nav-item {
   display: block;
-  padding: 16px 20px;
+  padding: 14px 18px;
   color: #b0a0ff;
   text-decoration: none;
-  border-radius: 14px;
-  margin-bottom: 8px;
-  transition: all 0.3s;
+  border-radius: 12px;
+  margin-bottom: 6px;
   font-weight: 500;
+  transition: 0.3s;
 }
 
 .nav-item:hover,
 .nav-item.active {
-  background: rgba(140, 0, 255, 0.3);
+  background: #6b21a8;
   color: white;
 }
 
-/* ==================== TOP BAR ==================== */
+/* Rest of your CSS (top bar, hero, etc.) stays the same */
 .top-bar {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 25px 35px;
-  background: rgba(15, 10, 45, 0.9);
-  border-bottom: 1px solid rgba(140, 0, 255, 0.2);
+  padding: 20px 30px;
+  background: #1a1433;
+  border-bottom: 1px solid #4b2e8a;
 }
 
 .greeting h1 {
-  font-size: 28px;
-  margin-bottom: 4px;
-}
-
-.greeting p {
-  color: #a0a0cc;
+  font-size: 26px;
 }
 
 .search-bar input {
-  padding: 14px 24px;
-  width: 420px;
-  background: rgba(30, 20, 70, 0.8);
+  padding: 14px 20px;
+  width: 380px;
+  background: #2a1f4d;
   border: 1px solid #7c3aed;
   border-radius: 50px;
   color: white;
-  font-size: 16px;
-}
-
-.search-bar input:focus {
-  outline: none;
-  border-color: #c084fc;
-  box-shadow: 0 0 0 3px rgba(192, 132, 252, 0.2);
 }
 
 .signin-btn {
-  padding: 12px 28px;
+  padding: 12px 26px;
   background: linear-gradient(90deg, #8b00ff, #c084fc);
   border: none;
   border-radius: 50px;
   color: white;
   font-weight: 600;
   cursor: pointer;
-  transition: transform 0.2s;
 }
 
-.signin-btn:hover {
-  transform: scale(1.05);
-}
-
-/* ==================== HERO SECTION ==================== */
+/* Hero / Featured */
 .hero {
-  margin: 30px 35px;
-  padding: 60px 50px;
-  background: linear-gradient(rgba(0,0,0,0.65), rgba(0,0,0,0.75)), #2a0066;
-  border-radius: 24px;
-  border: 1px solid #a855f7;
-  position: relative;
+  margin: 25px 30px;
+  padding: 50px;
+  background: linear-gradient(#2a1f4d, #1a1433);
+  border-radius: 20px;
+  border: 1px solid #8b5cf6;
 }
 
 .badge {
@@ -116,118 +96,37 @@ body {
   padding: 6px 18px;
   border-radius: 50px;
   font-size: 14px;
-  font-weight: 600;
-  display: inline-block;
-  margin-bottom: 16px;
 }
 
 .hero h2 {
-  font-size: 42px;
-  margin-bottom: 12px;
-  line-height: 1.1;
+  font-size: 38px;
+  margin: 12px 0;
 }
 
-.hero p {
-  font-size: 18px;
-  color: #c0b0ff;
-  max-width: 600px;
-  margin-bottom: 30px;
-}
-
-.hero-actions {
-  display: flex;
-  gap: 14px;
+.hero-actions button {
+  padding: 14px 32px;
+  border-radius: 50px;
+  margin-right: 12px;
+  font-weight: 600;
 }
 
 .play-btn {
-  padding: 16px 36px;
   background: linear-gradient(90deg, #a855f7, #c084fc);
   border: none;
-  border-radius: 50px;
   color: white;
-  font-size: 17px;
-  font-weight: 600;
-  cursor: pointer;
-  transition: all 0.3s;
 }
 
-.play-btn:hover {
-  transform: translateY(-3px);
-  box-shadow: 0 10px 25px rgba(168, 85, 247, 0.4);
-}
-
-.secondary-btn {
-  padding: 16px 32px;
-  background: transparent;
-  border: 2px solid #8b5cf6;
-  border-radius: 50px;
-  color: #e0e0ff;
-  font-size: 17px;
-  font-weight: 500;
-  cursor: pointer;
-  transition: all 0.3s;
-}
-
-.secondary-btn:hover {
-  background: rgba(139, 92, 246, 0.15);
-}
-
-/* ==================== RECOMMENDED SECTION ==================== */
-.section {
-  padding: 0 35px 40px;
+/* Game Grid */
+.game-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+  gap: 20px;
+  padding: 0 30px 40px;
 }
 
 .section-title {
-  font-size: 24px;
-  margin-bottom: 20px;
+  padding: 0 30px;
+  margin: 15px 0 20px;
+  font-size: 22px;
   color: #c084fc;
-}
-
-.game-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(190px, 1fr));
-  gap: 24px;
-}
-
-/* ==================== RIGHT SIDEBAR ==================== */
-.right-sidebar {
-  background: rgba(15, 10, 45, 0.98);
-  border-left: 1px solid rgba(140, 0, 255, 0.25);
-  padding: 30px 20px;
-}
-
-.quick-action-btn {
-  width: 100%;
-  padding: 18px;
-  font-size: 18px;
-  background: linear-gradient(90deg, #6d28d9, #a855f7);
-  border: none;
-  border-radius: 16px;
-  color: white;
-  font-weight: 600;
-  cursor: pointer;
-  margin-bottom: 24px;
-  transition: all 0.3s;
-}
-
-.quick-action-btn:hover {
-  transform: translateY(-2px);
-}
-
-.sidebar-card {
-  background: rgba(30, 20, 70, 0.6);
-  padding: 20px;
-  border-radius: 16px;
-  margin-bottom: 20px;
-  border: 1px solid rgba(140, 0, 255, 0.2);
-}
-
-/* Responsive */
-@media (max-width: 1200px) {
-  .dashboard {
-    grid-template-columns: 220px 1fr;
-  }
-  .right-sidebar {
-    display: none;
-  }
 }
