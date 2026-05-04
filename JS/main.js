@@ -1,5 +1,10 @@
+// Import game config
+import { games, getMostPopular } from './config.js';
+
 document.addEventListener('DOMContentLoaded', () => {
 
+  // ====================== BUTTONS ======================
+  
   // Sign In Button
   const signInBtn = document.getElementById('signInBtn');
   if (signInBtn) {
@@ -12,8 +17,9 @@ document.addEventListener('DOMContentLoaded', () => {
   const randomBtn = document.getElementById('randomBtn');
   if (randomBtn) {
     randomBtn.addEventListener('click', () => {
-      alert("Random Game feature coming soon!");
-      // You can later add actual random game logic here
+      const randomGame = games[Math.floor(Math.random() * games.length)];
+      alert(`Launching: ${randomGame.title}`);
+      // TODO: Later redirect to actual game
     });
   }
 
@@ -21,7 +27,9 @@ document.addEventListener('DOMContentLoaded', () => {
   const playFeatured = document.getElementById('playFeatured');
   if (playFeatured) {
     playFeatured.addEventListener('click', () => {
-      alert("Launching game... (Feature coming soon)");
+      const popular = getMostPopular();
+      const featured = popular[0];
+      alert(`Launching Featured Game: ${featured.title}`);
     });
   }
 
@@ -39,7 +47,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  // Dynamic Greeting (Hello, Guest)
+  // Dynamic Greeting
   const greeting = document.getElementById('greeting');
   if (greeting) {
     greeting.innerHTML = `
@@ -48,6 +56,20 @@ document.addEventListener('DOMContentLoaded', () => {
     `;
   }
 
-  // Example: You can later add real game cards here
-  console.log("Null_X Dashboard loaded successfully.");
+  // Set Featured Game from most clicked
+  function setFeaturedGame() {
+    const popular = getMostPopular();
+    if (popular.length > 0) {
+      const featured = popular[0];
+      const heroTitle = document.getElementById('hero-title');
+      const heroDesc = document.getElementById('hero-desc');
+      
+      if (heroTitle) heroTitle.textContent = featured.title;
+      if (heroDesc) heroDesc.textContent = featured.desc;
+    }
+  }
+
+  setFeaturedGame();
+
+  console.log("%cNull_X Dashboard loaded successfully", "color: #c084fc; font-weight: bold");
 });
