@@ -1,1 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Null_X Sign In</title>
+  
+  <!-- CSS -->
+  <link rel="stylesheet" href="login.css">
+</head>
+<body>
+  <div class="container">
+    <h1 class="glow">Null_X</h1>
+    <p class="subtitle">Sign in for brand new features</p>
+    
+    <div class="tabs">
+      <div class="tab active" id="signupTab">Create Account</div>
+      <div class="tab" id="loginTab">Login</div>
+    </div>
 
+    <!-- Sign Up Form -->
+    <div id="signupForm">
+      <div class="form-group">
+        <label>Your Email</label>
+        <input type="email" id="signupEmail" placeholder="yourname@yourdomain.com" onblur="checkEmail()">
+        <div id="emailFeedback" class="feedback"></div>
+      </div>
+      <div class="form-group">
+        <label>Username</label>
+        <input type="text" id="signupUsername" placeholder="Choose a username" onblur="checkUsername()">
+        <div id="usernameFeedback" class="feedback"></div>
+      </div>
+      <div class="form-group">
+        <label>Password</label>
+        <div class="password-container">
+          <input type="password" id="signupPassword" placeholder="At least 8 characters">
+          <span class="toggle-password" id="toggleSignupPassword">👁️</span>
+        </div>
+      </div>
+      <div id="signupMessage" class="feedback"></div>
+      <button onclick="handleSignup()">Create Account</button>
+    </div>
+
+    <!-- Login Form -->
+    <div id="loginForm" class="hidden">
+      <div class="form-group">
+        <label>Username</label>
+        <input type="text" id="loginUsername" placeholder="Your username">
+      </div>
+      <div class="form-group">
+        <label>Password</label>
+        <div class="password-container">
+          <input type="password" id="loginPassword" placeholder="Your password">
+          <span class="toggle-password" id="toggleLoginPassword">👁️</span>
+        </div>
+      </div>
+      <div id="loginMessage" class="feedback"></div>
+      <button onclick="handleLogin()">Login</button>
+    </div>
+  </div>
+
+  <script src="login.js"></script>
+</body>
+</html>
