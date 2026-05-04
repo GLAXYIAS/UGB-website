@@ -1,27 +1,53 @@
 document.addEventListener('DOMContentLoaded', () => {
-    
-  // Sign In Button - Goes to your Login folder
+
+  // Sign In Button
   const signInBtn = document.getElementById('signInBtn');
-  signInBtn.addEventListener('click', () => {
-    window.location.href = "Login/login.html";
-  });
+  if (signInBtn) {
+    signInBtn.addEventListener('click', () => {
+      window.location.href = "Login/login.html";
+    });
+  }
 
-  // Other buttons
-  document.getElementById('gamesBtn').addEventListener('click', () => {
-    alert("You are already on the Games page!");
-    // You can remove the alert later or make it scroll to top, etc.
-  });
+  // Random Game Button
+  const randomBtn = document.getElementById('randomBtn');
+  if (randomBtn) {
+    randomBtn.addEventListener('click', () => {
+      alert("Random Game feature coming soon!");
+      // You can later add actual random game logic here
+    });
+  }
 
-  document.getElementById('settingsBtn').addEventListener('click', () => {
-    alert("Settings panel coming soon ⚙️");
-  });
+  // Play Featured Button
+  const playFeatured = document.getElementById('playFeatured');
+  if (playFeatured) {
+    playFeatured.addEventListener('click', () => {
+      alert("Launching game... (Feature coming soon)");
+    });
+  }
 
-  // Search bar
+  // Search Input
   const searchInput = document.getElementById('searchInput');
-  searchInput.addEventListener('keyup', (e) => {
-    if (e.key === 'Enter' && searchInput.value.trim() !== "") {
-      console.log('Searching for:', searchInput.value);
-      // Add search logic later
-    }
-  });
+  if (searchInput) {
+    searchInput.addEventListener('keyup', (e) => {
+      if (e.key === 'Enter') {
+        const query = searchInput.value.trim();
+        if (query) {
+          console.log('Searching for:', query);
+          alert(`Searching for: ${query} (Feature coming soon)`);
+        }
+      }
+    });
+  }
+
+  // Dynamic Greeting (Hello, Guest)
+  const greeting = document.getElementById('greeting');
+  if (greeting) {
+    greeting.innerHTML = `
+      <h1>Hello, Guest</h1>
+      <p>Find something fun to play.</p>
+    `;
+  }
+
+  // Example: You can later add real game cards here
+  console.log("Null_X Dashboard loaded successfully.");
 });
