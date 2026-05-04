@@ -3,71 +3,71 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Unblocked Games</title>
+  <title>Null_X - Unblocked Games</title>
   <link rel="stylesheet" href="CSS/style.css">
 </head>
 <body>
   <div class="dashboard">
     <!-- Left Sidebar -->
     <aside class="left-nav">
-      <div class="logo">🎮 Null_X</div>
+      <div class="logo">Null_X</div>
       
       <nav>
-        <a href="#" class="nav-item active"><span>🏠</span> Home</a>
-        <a href="#" class="nav-item"><span>🎲</span> All Games</a>
-        <a href="#" class="nav-item"><span>🔥</span> Trending</a>
-        <a href="#" class="nav-item"><span>⭐</span> Favorites</a>
-        <a href="#" class="nav-item"><span>📂</span> Categories</a>
+        <a href="#" class="nav-item active">Home</a>
+        <a href="#" class="nav-item">All Games</a>
+        <a href="#" class="nav-item">Trending</a>
+        <a href="#" class="nav-item">Favorites</a>
+        <a href="#" class="nav-item">Categories</a>
       </nav>
     </aside>
 
     <!-- Main Content -->
     <main class="main-content">
-      <!-- Top Bar -->
       <header class="top-bar">
-        <div class="greeting">
-          <h1>Good evening, <span class="username">Glaeesas</span></h1>
-          <p>Bored? Hit Random Game and let fate decide.</p>
+        <div class="greeting" id="greeting">
+          <h1>Hello, Guest</h1>
+          <p>Find something fun to play.</p>
         </div>
+        
         <div class="search-bar">
           <input type="text" id="searchInput" placeholder="Search games...">
         </div>
+        
         <button class="signin-btn" id="signInBtn">Sign In</button>
       </header>
 
-      <!-- Spotlight -->
-      <section class="spotlight">
-        <div class="spotlight-badge">✦ TODAY'S SPOTLIGHT</div>
-        <h2 class="spotlight-title">Solar Smash</h2>
-        <p class="spotlight-desc">Destroy planets in this addictive physics game. A featured pick from the community.</p>
-        
-        <div class="spotlight-actions">
-          <button class="play-btn">▶ Play Now</button>
-          <button class="secondary-btn">Shuffle</button>
+      <!-- Hero Section -->
+      <section class="hero">
+        <div class="hero-content">
+          <span class="badge">Featured</span>
+          <h2 id="hero-title">Epic Physics Battle</h2>
+          <p id="hero-desc">Intense action with smooth controls. Perfect for quick sessions.</p>
+          <div class="hero-actions">
+            <button class="play-btn" id="playFeatured">Play Now</button>
+            <button class="secondary-btn">Discover More</button>
+          </div>
         </div>
       </section>
 
-      <!-- Recommended / Game Grid -->
+      <!-- Games Section -->
       <section class="section">
-        <h2 class="section-title">Recommended For You</h2>
+        <h2 class="section-title">Recommended Games</h2>
         <div class="game-grid" id="gameGrid">
-          <!-- Games will be added here -->
+          <!-- JS will populate games here -->
         </div>
       </section>
     </main>
 
     <!-- Right Sidebar -->
     <aside class="right-sidebar">
-      <button class="quick-btn" id="randomBtn">🎲 Random Game</button>
+      <button class="quick-action-btn" id="randomBtn">Random Game</button>
       
-      <div class="quick-card">
-        <h3>Trending</h3>
-        <p>Top games this week</p>
+      <div class="sidebar-card">
+        <h3>Trending Now</h3>
       </div>
-
-      <div class="quick-card">
-        <h3>Your Favorites</h3>
-        <p>Quick access to starred games</p>
+      
+      <div class="sidebar-card">
+        <h3>Popular Categories</h3>
       </div>
     </aside>
   </div>
