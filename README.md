@@ -32,7 +32,7 @@
 
 ## Preview
 <p align="center">
-  <img src="giphs/bGOrl9.gif" width="500"/>
+  <img src="gifs/bGOrl9.gif" width="500"/>
 </p>
 
 ---
