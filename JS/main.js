@@ -2,16 +2,23 @@ import { games, getMostPopular } from './config.js';
 
 document.addEventListener('DOMContentLoaded', () => {
 
-  // ====================== NAVIGATION ======================
-  
-  // Sign In (Login) Button
+  console.log("JavaScript loaded successfully");
+
+  // ====================== SIGN IN BUTTON (with debug) ======================
   const signInBtn = document.getElementById('signInBtn');
+  console.log("Sign In button found:", signInBtn ? "YES" : "NO");
+
   if (signInBtn) {
     signInBtn.addEventListener('click', () => {
+      console.log("Sign In button clicked! Redirecting...");
       window.location.href = "Login/login.html";
     });
+  } else {
+    console.error("Sign In button NOT found! Check the ID in HTML.");
   }
 
+  // ====================== NAVIGATION ======================
+ 
   // Left Sidebar Navigation
   const navHome = document.getElementById('nav-home');
   const navGames = document.getElementById('nav-games');
@@ -25,7 +32,7 @@ document.addEventListener('DOMContentLoaded', () => {
   if (navUnblockers) navUnblockers.addEventListener('click', () => alert("Unblockers / Proxy section coming soon"));
   if (navCommunications) navCommunications.addEventListener('click', () => alert("Communications / Chat coming soon"));
 
-  // Settings (Not functional yet as requested)
+  // Settings
   const settingsBtn = document.getElementById('settingsBtn');
   if (settingsBtn) {
     settingsBtn.addEventListener('click', () => {
