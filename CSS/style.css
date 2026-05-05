@@ -189,7 +189,7 @@ body {
 }
 
 .site-logo {
-  width: 140px;           /* ← This controls the size */
+  width: 120px;           /* ← This controls the size */
   height: auto;
   max-width: 100%;
   border-radius: 8px;
