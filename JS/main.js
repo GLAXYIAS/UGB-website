@@ -35,13 +35,12 @@ document.addEventListener('DOMContentLoaded', () => {
   function applyTheme(theme) {
   const root = document.documentElement;
   
-  if (theme === 'midnight') {
+ if (theme === 'midnight') {
     root.style.setProperty('--accent', '#ffffff');
     root.style.setProperty('--container-bg', '#000000');
-    // For Midnight, we turn the gradient into a solid black
     root.style.setProperty('--bg-gradient', '#000000');
-    document.body.style.background = "#000000"; 
-  } else {
+    document.body.style.background = "#000000";
+} else {
     // Reset to Default Purple
     root.style.setProperty('--accent', '#8b00ff');
     root.style.setProperty('--container-bg', 'rgba(15, 15, 25, 0.95)');
