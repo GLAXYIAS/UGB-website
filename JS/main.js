@@ -32,23 +32,23 @@ document.addEventListener('DOMContentLoaded', () => {
     closeSettings.addEventListener('click', () => settingsModal.style.display = 'none');
   }
 
-  // Theme Application function
   function applyTheme(theme) {
-    const root = document.documentElement;
-    if (theme === 'midnight') {
-      root.style.setProperty('--accent', '#ffffff');
-      root.style.setProperty('--bg-gradient', '#000000');
-      root.style.setProperty('--container-bg', '#000000');
-      document.body.style.background = "#000000";
-      // Update text colors for midnight if needed
-      root.style.setProperty('--text-main', '#ffffff');
-    } else {
-      root.style.setProperty('--accent', '#8b00ff');
-      root.style.setProperty('--bg-gradient', 'linear-gradient(135deg, #0a0a0a, #1a0033)');
-      root.style.setProperty('--container-bg', 'rgba(15, 15, 25, 0.95)');
-      document.body.style.background = "linear-gradient(135deg, #0a0a0a, #1a0033)";
-    }
+  const root = document.documentElement;
+  
+  if (theme === 'midnight') {
+    root.style.setProperty('--accent', '#ffffff');
+    root.style.setProperty('--container-bg', '#000000');
+    // For Midnight, we turn the gradient into a solid black
+    root.style.setProperty('--bg-gradient', '#000000');
+    document.body.style.background = "#000000"; 
+  } else {
+    // Reset to Default Purple
+    root.style.setProperty('--accent', '#8b00ff');
+    root.style.setProperty('--container-bg', 'rgba(15, 15, 25, 0.95)');
+    root.style.setProperty('--bg-gradient', 'linear-gradient(135deg, #0a0a0a, #1a0033)');
+    document.body.style.background = "linear-gradient(135deg, #0a0a0a, #1a0033)";
   }
+}
 
   themeCards.forEach(card => {
     card.addEventListener('click', () => {
