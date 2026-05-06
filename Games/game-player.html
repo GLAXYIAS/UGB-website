@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Null_X Player</title>
+    <link rel="stylesheet" href="../CSS/style.css">
+    <style>
+        body, html { margin: 0; padding: 0; height: 100%; overflow: hidden; background: #000; }
+        .player-nav {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 50px;
+            background: var(--container-bg);
+            border-bottom: 1px solid var(--accent);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 20px;
+            z-index: 10;
+        }
+        #game-container {
+            width: 100%;
+            height: calc(100vh - 50px);
+            margin-top: 50px;
+            border: none;
+        }
+        .back-btn {
+            color: var(--text);
+            text-decoration: none;
+            font-weight: 600;
+        }
+    </style>
+</head>
+<body>
+    <div class="player-nav">
+        <a href="../index.html" class="back-btn">← Back</a>
+        <span id="game-display-title" style="color: var(--accent); font-weight: bold;"></span>
+        <button onclick="document.getElementById('game-container').requestFullscreen()" class="signin-btn" style="padding: 5px 10px; font-size: 12px;">Fullscreen</button>
+    </div>
+    <iframe id="game-container" src="" allowfullscreen></iframe>
+
+    <script type="module">
+        import { games } from '../JS/config.js';
+
+        const urlParams = new URLSearchParams(window.location.search);
+        const gameId = urlParams.get('id');
+        const gameData = games.find(g => g.id === gameId);
+
+        if (gameData) {
+            document.title = gameData.title + " | Null_X";
+            document.getElementById('game-display-title').textContent = gameData.title;
+            document.getElementById('game-container').src = "../" + gameData.url;
+        } else {
+            window.location.href = "../index.html";
+        }
+    </script>
+</body>
+</html>
