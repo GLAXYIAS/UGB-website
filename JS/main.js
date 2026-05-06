@@ -2,7 +2,47 @@ import { games, getMostPopular } from './config.js';
 
 document.addEventListener('DOMContentLoaded', () => {
   console.log("JavaScript loaded successfully");
+// ====================== PANIC BUTTON LOGIC ======================
+const panicInput = document.getElementById('panicShortcut');
+const panicLinkInput = document.getElementById('panicLink');
+const savePanicBtn = document.getElementById('savePanic');
 
+// 1. Load saved settings on page load
+let savedShortcut = localStorage.getItem('panicKey') || "";
+let savedLink = localStorage.getItem('panicUrl') || "https://google.com";
+
+if (panicInput) panicInput.value = savedShortcut;
+if (panicLinkInput) panicLinkInput.value = savedLink;
+
+// 2. Capture the key for the shortcut
+if (panicInput) {
+    panicInput.addEventListener('keydown', (e) => {
+        e.preventDefault(); // Stop the key from actually typing
+        panicInput.value = e.key; // Set the input to the key name (e.g., "p" or "Escape")
+    });
+}
+
+// 3. Save to LocalStorage
+if (savePanicBtn) {
+    savePanicBtn.addEventListener('click', () => {
+        localStorage.setItem('panicKey', panicInput.value);
+        localStorage.setItem('panicUrl', panicLinkInput.value);
+        savedShortcut = panicInput.value;
+        savedLink = panicLinkInput.value;
+        alert("Panic settings saved!");
+    });
+}
+
+// 4. THE ACTUAL PANIC TRIGGER
+// This listens for the key globally on the site
+window.addEventListener('keydown', (e) => {
+    // If the key pressed matches our saved key, and it's not empty
+    if (e.key === savedShortcut && savedShortcut !== "") {
+        // Ensure the link starts with http so it doesn't break
+        let url = savedLink.startsWith('http') ? savedLink : 'https://' + savedLink;
+        window.location.href = url;
+    }
+});
   // ====================== THEME PERSISTENCE ======================
   // This makes sure your choice stays even if you refresh!
   const savedTheme = localStorage.getItem('selectedTheme');
