@@ -3,9 +3,9 @@
   <img src="https://capsule-render.vercel.app/api?type=waving&color=0:00c6ff,100:0072ff&height=200&section=header&text=Null_X&fontSize=40&fontColor=ffffff&animation=fadeIn" />
 </p>
 
-<!-- TYPING ANIMATION (slower + no repeat) -->
+<!-- TYPING ANIMATION -->
 <p align="center">
-  <img src="https://readme-typing-svg.herokuapp.com?font=Fira+Code&size=25&duration=5000&pause=2000&color=00C6FF&center=true&vCenter=true&width=700&lines=This+is+my+UBG+website+that+I+am+making&repeat=false" />
+  <img src="https://readme-typing-svg.herokuapp.com?font=Fira+Code&size=25&duration=5000&pause=2000&color=00C6FF&center=true&vCenter=true&width=700&lines=This+is+my+website+that+I+am+making&repeat=false" />
 </p>
 
 ---
