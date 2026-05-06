@@ -1,110 +1,521 @@
 :root {
+
   --accent: #8b00ff;
+
   --bg-gradient: linear-gradient(135deg, #0a0a0a, #1a0033);
+
   --container-bg: rgba(15, 15, 25, 0.95);
+
   --text: #e0e0e0;
-  --sidebar-bg: #1a1433; /* Default sidebar */
+
+}
+
+
+
+/* Use these variables in your existing classes! */
+
+.container { 
+
+  border: 2px solid var(--accent) !important; 
+
+  background: var(--container-bg) !important;
+
 }
 
 * {
+
   margin: 0;
+
   padding: 0;
+
   box-sizing: border-box;
+
 }
+
+
 
 body {
+
   font-family: 'Inter', system-ui, sans-serif;
-  background: var(--bg-gradient); /* Fixed: Now it follows the theme */
-  color: var(--text);
+
+  background: #0f0a1f;
+
+  color: #e0e0ff;
+
   min-height: 100vh;
+
 }
 
-/* Sidebar & Top Bar - Updated to use variables */
-.left-nav, .right-sidebar, .top-bar {
-  background: var(--container-bg); 
-  border-color: var(--accent);
-  border-style: solid;
-}
 
-.left-nav { border-right-width: 1px; padding: 25px 15px; }
-.right-sidebar { border-left-width: 1px; padding: 25px 20px; }
-.top-bar { border-bottom-width: 1px; padding: 20px 30px; }
 
 .dashboard {
+
   display: grid;
-  grid-template-columns: 220px 1fr 280px;
+
+  grid-template-columns: 220px 1fr 280px;   /* Left sidebar now smaller */
+
   min-height: 100vh;
+
 }
 
-/* Search Bar - Updated to use variables */
-.search-bar input {
-  padding: 14px 20px;
-  width: 380px;
-  background: rgba(255, 255, 255, 0.05);
-  border: 1px solid var(--accent);
-  border-radius: 50px;
-  color: white;
+
+
+    /* Update your Sidebar */
+
+.left-nav, .right-sidebar, .top-bar {
+
+  background: var(--container-bg); /* Now it follows your theme! */
+
+  border-color: var(--accent);     /* Borders will turn white in Midnight */
+
 }
 
-/* Hero Section - Updated to use variables */
-.hero {
-  margin: 25px 30px;
-  padding: 50px;
-  background: var(--container-bg);
-  border-radius: 20px;
-  border: 1px solid var(--accent);
+.logo {
+
+  font-size: 28px;
+
+  font-weight: 900;
+
+  margin-bottom: 40px;
+
+  color: #c084fc;
+
+  padding-left: 10px;
+
 }
 
-/* Buttons - Use the accent variable for glows */
-.signin-btn, .quick-action-btn {
-  background: linear-gradient(90deg, var(--accent), #c084fc);
-  color: white;
-  border: none;
+
+
+.nav-item {
+
+  display: block;
+
+  padding: 14px 18px;
+
+  color: #b0a0ff;
+
+  text-decoration: none;
+
   border-radius: 12px;
-  cursor: pointer;
+
+  margin-bottom: 6px;
+
+  font-weight: 500;
+
   transition: 0.3s;
+
 }
+
+
+
+.nav-item:hover,
+
+.nav-item.active {
+
+  background: #6b21a8;
+
+  color: white;
+
+}
+
+
+
+/* Rest of your CSS (top bar, hero, etc.) stays the same */
+
+.top-bar {
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: space-between;
+
+  padding: 20px 30px;
+
+  background: #1a1433;
+
+  border-bottom: 1px solid #4b2e8a;
+
+}
+
+
+
+.greeting h1 {
+
+  font-size: 26px;
+
+}
+
+
+
+/* Update your Inputs */
+
+.search-bar input {
+
+  background: rgba(255, 255, 255, 0.05);
+
+  border: 1px solid var(--accent);
+
+  color: white;
+
+}
+
+.signin-btn {
+
+  padding: 12px 26px;
+
+  background: linear-gradient(90deg, #8b00ff, #c084fc);
+
+  border: none;
+
+  border-radius: 50px;
+
+  color: white;
+
+  font-weight: 600;
+
+  cursor: pointer;
+
+}
+
+
+
+/* Hero / Featured */
+
+.hero {
+
+  margin: 25px 30px;
+
+  padding: 50px;
+
+  background: linear-gradient(#2a1f4d, #1a1433);
+
+  border-radius: 20px;
+
+  border: 1px solid #8b5cf6;
+
+}
+
+
+
+.badge {
+
+  background: #8b00ff;
+
+  padding: 6px 18px;
+
+  border-radius: 50px;
+
+  font-size: 14px;
+
+}
+
+
+
+.hero h2 {
+
+  font-size: 38px;
+
+  margin: 12px 0;
+
+}
+
+
+
+.hero-actions button {
+
+  padding: 14px 32px;
+
+  border-radius: 50px;
+
+  margin-right: 12px;
+
+  font-weight: 600;
+
+}
+
+
+
+.play-btn {
+
+  background: linear-gradient(90deg, #a855f7, #c084fc);
+
+  border: none;
+
+  color: white;
+
+}
+
+
+
+/* Game Grid */
+
+.game-grid {
+
+  display: grid;
+
+  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+
+  gap: 20px;
+
+  padding: 0 30px 40px;
+
+}
+
+
+
+.section-title {
+
+  padding: 0 30px;
+
+  margin: 15px 0 20px;
+
+  font-size: 22px;
+
+  color: #c084fc;
+
+}
+
+/* Right Sidebar */
+
+.right-sidebar {
+
+  background: #1a1433;
+
+  border-left: 1px solid #4b2e8a;
+
+  padding: 25px 20px;
+
+  display: flex;
+
+  flex-direction: column;
+
+  gap: 12px;
+
+}
+
+
+
+.signin-btn, .settings-btn {
+
+  width: 100%;
+
+  padding: 14px 20px;
+
+  border: none;
+
+  border-radius: 12px;
+
+  font-size: 16px;
+
+  font-weight: 600;
+
+  cursor: pointer;
+
+  transition: 0.3s;
+
+}
+
+
+
+.signin-btn {
+
+  background: linear-gradient(90deg, #8b00ff, #c084fc);
+
+  color: white;
+
+}
+
+
 
 .settings-btn {
-  background: rgba(255, 255, 255, 0.05);
-  color: var(--text);
-  border: 1px solid var(--accent);
-  border-radius: 12px;
-  padding: 14px 20px;
-  cursor: pointer;
+
+  background: #2a1f4d;
+
+  color: #c0b0ff;
+
+  border: 1px solid #6b21a8;
+
 }
 
-/* Modals */
-.modal-overlay {
-  display: none;
-  position: fixed;
-  top: 0; left: 0;
-  width: 100%; height: 100%;
-  background: rgba(0,0,0,0.85);
-  backdrop-filter: blur(8px);
-  z-index: 9999;
-  justify-content: center;
-  align-items: center;
+
+
+.settings-btn:hover {
+
+  background: #3b2a66;
+
 }
+
+
+
+/* Random Game under featured */
+
+.random-section {
+
+  padding: 0 30px 20px;
+
+}
+
+
+
+.quick-action-btn {
+
+  width: 100%;
+
+  padding: 16px 24px;
+
+  background: linear-gradient(90deg, #6d28d9, #a855f7);
+
+  border: none;
+
+  border-radius: 50px;
+
+  color: white;
+
+  font-size: 17px;
+
+  font-weight: 600;
+
+  cursor: pointer;
+
+}
+
+/* Logo Styling */
+
+.logo {
+
+  margin-bottom: 35px;
+
+  padding: 0 10px;
+
+}
+
+
+
+.site-logo {
+
+  width: 100px;           /* ← This controls the size */
+
+  height: auto;
+
+  max-width: 100%;
+
+  border-radius: 8px;
+
+  filter: drop-shadow(0 4px 8px rgba(139, 0, 255, 0.3));
+
+}
+
+.modal-overlay {
+
+  display: none; /* Hidden by default */
+
+  position: fixed;
+
+  top: 0; left: 0;
+
+  width: 100%; height: 100%;
+
+  background: rgba(0,0,0,0.85);
+
+  backdrop-filter: blur(8px);
+
+  z-index: 9999;
+
+  justify-content: center;
+
+  align-items: center;
+
+}
+
+
 
 .modal-box {
+
   background: var(--container-bg);
+
   border: 2px solid var(--accent);
+
   padding: 40px;
+
   border-radius: 20px;
+
   width: 90%;
+
   max-width: 500px;
+
   position: relative;
+
+  text-align: center;
+
 }
 
-/* Theme Previews */
-.purple-preview { background: linear-gradient(135deg, #0a0a0a, #1a0033); border: 1px solid #8b00ff; }
-.midnight-preview { background: #000000; border: 1px solid #ffffff; }
+
+
+.theme-grid {
+
+  display: grid;
+
+  grid-template-columns: 1fr 1fr;
+
+  gap: 20px;
+
+  margin-top: 20px;
+
+}
+
+
+
+.theme-card {
+
+  cursor: pointer;
+
+  border: 2px solid transparent;
+
+  padding: 10px;
+
+  border-radius: 12px;
+
+  transition: 0.3s;
+
+}
+
+
+
+.theme-card:hover { border-color: var(--accent); }
+
+
+
+.preview {
+
+  height: 60px;
+
+  border-radius: 8px;
+
+  margin-bottom: 8px;
+
+  border: 1px solid #444;
+
+}
+
+
+
+.purple-preview { background: linear-gradient(135deg, #0a0a0a, #1a0033); border-color: #8b00ff; }
+
+.midnight-preview { background: #000; border-color: #fff; }
+
+
 
 .close-x {
+
   position: absolute;
+
   top: 15px; right: 20px;
+
   color: #ff4d4d;
+
   font-size: 30px;
+
   cursor: pointer;
+
 }
