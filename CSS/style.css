@@ -519,3 +519,34 @@ body {
   cursor: pointer;
 
 }
+.panic-inputs {
+    text-align: left;
+    margin-top: 15px;
+}
+
+.panic-inputs p {
+    font-size: 14px;
+    margin-bottom: 5px;
+    color: #b0a0ff;
+}
+
+.panic-inputs input {
+    width: 100%;
+    margin-bottom: 15px;
+    padding: 10px;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid var(--accent);
+    color: white;
+    border-radius: 8px;
+}
+
+.secondary-btn {
+    width: 100%;
+    padding: 10px;
+    background: var(--accent);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: 600;
+}
