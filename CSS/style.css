@@ -1,4 +1,4 @@
-* :root {
+:root {
   --accent: #8b00ff;
   --bg-gradient: linear-gradient(135deg, #0a0a0a, #1a0033);
   --container-bg: rgba(15, 15, 25, 0.95);
@@ -9,7 +9,8 @@
 .container { 
   border: 2px solid var(--accent) !important; 
   background: var(--container-bg) !important;
-}{
+}
+* {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
@@ -28,13 +29,11 @@ body {
   min-height: 100vh;
 }
 
-/* Left Sidebar - Smaller */
-.left-nav {
-  background: #1a1433;
-  border-right: 1px solid #4b2e8a;
-  padding: 25px 15px;
+    /* Update your Sidebar */
+.left-nav, .right-sidebar, .top-bar {
+  background: var(--container-bg); /* Now it follows your theme! */
+  border-color: var(--accent);     /* Borders will turn white in Midnight */
 }
-
 .logo {
   font-size: 28px;
   font-weight: 900;
@@ -74,15 +73,12 @@ body {
   font-size: 26px;
 }
 
+/* Update your Inputs */
 .search-bar input {
-  padding: 14px 20px;
-  width: 380px;
-  background: #2a1f4d;
-  border: 1px solid #7c3aed;
-  border-radius: 50px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid var(--accent);
   color: white;
 }
-
 .signin-btn {
   padding: 12px 26px;
   background: linear-gradient(90deg, #8b00ff, #c084fc);
