@@ -8,6 +8,13 @@ const _0xData = [
     url: "Games/slope/index.html",
     desc: "A fast-paced 3D platformer. Avoid obstacles and stay on the track!",
     popular: true
+  },
+  {
+    id: "d_md",
+    title: atob("RHJpdmUgTWFk"), 
+    url: "Games/drivemad/index.html",
+    desc: "Drive your 4x4 to the finish line without flipping over! Challenging physics-based driving.",
+    popular: true
   }
 ];
 
