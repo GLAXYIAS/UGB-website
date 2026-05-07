@@ -1,6 +1,19 @@
-import { games, getMostPopular } from './config.js';
 import { applyCloak } from '../Cloaks/Cloaks.js';
+// --- DATA HARDCODED HERE TO BYPASS FILTERS ---
+const games = [
+  {
+    id: "slope",
+    title: "Slope",
+    url: "Games/slope/index.html",
+    desc: "A fast-paced 3D platformer. Avoid obstacles and stay on the track as you accelerate down the neon slope!",
+    tags: ["3D", "Action", "Runner"],
+    popular: true
+  }
+];
 
+function getMostPopular() {
+    return games.filter(g => g.popular);
+}
 document.addEventListener('DOMContentLoaded', () => {
     const savedTheme = localStorage.getItem('selectedTheme');
     if (savedTheme) applyTheme(savedTheme);
