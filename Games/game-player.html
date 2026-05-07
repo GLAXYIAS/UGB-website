@@ -1,25 +1,53 @@
 <script type="module">
-    // 1. Get the Cloak from storage
-    const savedCloak = localStorage.getItem('savedCloak');
-    const defaultTitle = "Null_X";
+    /**
+     * UNIVERSAL CLOAK LOCKER
+     * Automatically pulls the current tab's title and icon
+     * to keep the game-player stealthy.
+     */
+    function lockTab() {
+        const savedCloak = localStorage.getItem('savedCloak');
+        
+        // 1. Get the current active tab's title and favicon from the main window
+        // or from what we know is currently set.
+        const currentTitle = localStorage.getItem('cloakTitle') || "Null_X";
+        const currentIcon = localStorage.getItem('cloakIcon') || "../imgs/favicon.png";
 
-    // 2. Map of Cloak names to their Titles
-    const cloakTitles = {
-        "Google Classroom": "Classes",
-        "Google Drive": "My Drive - Google Drive",
-        "none": defaultTitle
-    };
+        // 2. Force the title
+        if (document.title !== currentTitle) {
+            document.title = currentTitle;
+        }
 
-    // 3. Force the title immediately
-    function lockTitle() {
-        const title = cloakTitles[savedCloak] || defaultTitle;
-        document.title = title;
+        // 3. Force the favicon
+        let link = document.querySelector("link[rel~='icon']");
+        if (!link) {
+            link = document.createElement('link');
+            link.rel = 'icon';
+            document.head.appendChild(link);
+        }
+        
+        if (link.href !== currentIcon) {
+            link.href = currentIcon;
+        }
     }
 
-    // Run it once on load
-    lockTitle();
+    // Run the lock immediately and every 500ms to fight Unity/Slope title changes
+    lockTab();
+    setInterval(lockTab, 500);
 
-    // 4. (Optional) Prevent the game's index.html from changing it via the iframe
-    // This runs every second to "correct" any changes the game tries to make
-    setInterval(lockTitle, 1000);
+    // --- GAME LOADING LOGIC ---
+    const urlParams = new URLSearchParams(window.location.search);
+    const gameId = urlParams.get('id');
+    const iframe = document.getElementById('game-frame');
+
+    // This matches your stealth IDs in main.js
+    const gamePaths = {
+        "s_lp": "slope/index.html",
+        "d_md": "drivemad/index.html",
+        "b_ft": "bulletforce/index.html",
+        "p_em": "pokemon-emerald/index.html"
+    };
+
+    if (gameId && gamePaths[gameId]) {
+        iframe.src = gamePaths[gameId];
+    }
 </script>
