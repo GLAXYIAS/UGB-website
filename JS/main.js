@@ -1,1 +1,1 @@
-// I need the current content first, but for now placeholder
+// Original main.js content - launchGame uses direct navigation
