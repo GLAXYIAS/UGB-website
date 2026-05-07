@@ -1,9 +1,10 @@
+alert("1: Script loading...");
 import { games, getMostPopular } from './config.js';
 import { applyCloak } from '../Cloaks/cloak.js';
-
+alert("2: Imports successful!");
 document.addEventListener('DOMContentLoaded', () => {
     console.log("Null_X Dashboard Loaded");
-
+alert("3: Site ready!");
     // ====================== 1. PERSISTENCE ======================
     const savedTheme = localStorage.getItem('selectedTheme');
     if (savedTheme) applyTheme(savedTheme);
