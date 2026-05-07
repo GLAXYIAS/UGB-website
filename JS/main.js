@@ -1,5 +1,4 @@
 import { games, getMostPopular } from './config.js';
-import { applyCloak } from '../Cloaks/cloak.js';
 
 document.addEventListener('DOMContentLoaded', () => {
     const savedTheme = localStorage.getItem('selectedTheme');
