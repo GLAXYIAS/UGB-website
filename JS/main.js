@@ -1,7 +1,6 @@
 import { applyCloak } from '../Cloaks/Cloaks.js';
 
-// --- DATA HARDCODED & ENCODED TO BYPASS FILTERS ---
-// ids: s_lp (Slope), d_md (Drive Mad), b_ft (Bullet Force), p_em (Pokemon)
+// --- DATA HARDCODED HERE TO BYPASS FILTERS ---
 const _0xData = [
   {
     id: "s_lp",
@@ -33,12 +32,12 @@ const _0xData = [
   }
 ];
 
+// Fixed: Functions now use _0xData instead of 'games'
 function getMostPopular() {
     return _0xData.filter(g => g.popular);
 }
 
 document.addEventListener('DOMContentLoaded', () => {
-    // 1. THEME & CLOAK PERSISTENCE
     const savedTheme = localStorage.getItem('selectedTheme');
     if (savedTheme) applyTheme(savedTheme);
 
@@ -47,17 +46,22 @@ document.addEventListener('DOMContentLoaded', () => {
         try { applyCloak(savedCloak); } catch (e) {}
     }
 
-    // 2. SELECTORS
-    const navHome = document.getElementById('nav-home');
-    const navGames = document.getElementById('nav-games');
-    const heroSection = document.getElementById('heroSection');
-    const gameGrid = document.getElementById('gameGrid');
+    let savedShortcut = localStorage.getItem('panicKey') || "";
+    let savedLink = localStorage.getItem('panicUrl') || "https://google.com";
+
     const settingsModal = document.getElementById('settingsModal');
     const settingsBtn = document.getElementById('settingsBtn');
     const closeSettings = document.getElementById('closeSettings');
     const cloakSelector = document.getElementById('cloakSelector');
+    const panicInput = document.getElementById('panicShortcut');
+    const panicLinkInput = document.getElementById('panicLink');
+    const savePanicBtn = document.getElementById('savePanic');
+    
+    const navHome = document.getElementById('nav-home');
+    const navGames = document.getElementById('nav-games');
+    const heroSection = document.getElementById('heroSection');
+    const gameGrid = document.getElementById('gameGrid');
 
-    // 3. THEME LOGIC
     function applyTheme(theme) {
         const root = document.documentElement;
         if (theme === 'midnight') {
@@ -71,9 +75,10 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    // 4. NAVIGATION & LIBRARY
     function launchGame(gameId) {
-        window.location.href = `Games/game-player.html?id=${gameId}`;
+        // Use the encoded data to find the URL
+        const game = _0xData.find(g => g.id === gameId);
+        if (game) window.location.href = game.url;
     }
 
     function showLibrary() {
@@ -81,6 +86,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if (gameGrid) {
             gameGrid.innerHTML = '';
             gameGrid.style.display = 'grid';
+            // Fixed: changed 'games' to '_0xData'
             _0xData.forEach(game => {
                 const card = document.createElement('div');
                 card.className = 'game-card';
@@ -99,58 +105,74 @@ document.addEventListener('DOMContentLoaded', () => {
         if (gameGrid) gameGrid.style.display = 'none';
     }
 
-    if (navGames) navGames.onclick = (e) => { e.preventDefault(); showLibrary(); };
-    if (navHome) navHome.onclick = (e) => { e.preventDefault(); showHome(); };
+    if (navGames) {
+        navGames.addEventListener('click', (e) => {
+            e.preventDefault();
+            showLibrary();
+        });
+    }
 
-    // 5. CLOAK & SETTINGS LOGIC
-    if (settingsBtn) settingsBtn.onclick = () => settingsModal.style.display = 'flex';
-    if (closeSettings) closeSettings.onclick = () => settingsModal.style.display = 'none';
+    if (navHome) {
+        navHome.addEventListener('click', (e) => {
+            e.preventDefault();
+            showHome();
+        });
+    }
+
+    document.querySelectorAll('.theme-card').forEach(card => {
+        card.addEventListener('click', () => {
+            const theme = card.getAttribute('data-theme');
+            applyTheme(theme);
+            localStorage.setItem('selectedTheme', theme);
+        });
+    });
 
     if (cloakSelector) {
         if (savedCloak) cloakSelector.value = savedCloak;
-        cloakSelector.onchange = (e) => {
+        cloakSelector.addEventListener('change', (e) => {
             const val = e.target.value;
             if (val === "none") {
                 localStorage.removeItem('savedCloak');
-                localStorage.removeItem('cloakTitle');
-                localStorage.removeItem('cloakIcon');
                 location.reload(); 
             } else {
                 applyCloak(val);
             }
-        };
+        });
     }
 
-    // 6. PANIC BUTTON LOGIC
-    let savedShortcut = localStorage.getItem('panicKey') || "";
-    let savedLink = localStorage.getItem('panicUrl') || "https://google.com";
-    const panicInput = document.getElementById('panicShortcut');
-    const panicLinkInput = document.getElementById('panicLink');
-    const savePanicBtn = document.getElementById('savePanic');
+    if (panicInput) panicInput.value = savedShortcut;
+    if (panicLinkInput) panicLinkInput.value = savedLink;
 
     if (panicInput) {
-        panicInput.value = savedShortcut;
-        panicInput.onkeydown = (e) => { e.preventDefault(); panicInput.value = e.key; };
+        panicInput.addEventListener('keydown', (e) => {
+            e.preventDefault();
+            panicInput.value = e.key; 
+        });
     }
-    if (panicLinkInput) panicLinkInput.value = savedLink;
+
     if (savePanicBtn) {
-        savePanicBtn.onclick = () => {
+        savePanicBtn.addEventListener('click', () => {
             localStorage.setItem('panicKey', panicInput.value);
             localStorage.setItem('panicUrl', panicLinkInput.value);
-            alert("Panic settings saved!");
-        };
+            savedShortcut = panicInput.value;
+            savedLink = panicLinkInput.value;
+            alert("Saved");
+        });
     }
 
-    window.onkeydown = (e) => {
+    window.addEventListener('keydown', (e) => {
         const isTyping = e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA';
-        if (!isTyping && e.key === localStorage.getItem('panicKey')) {
-            window.location.href = localStorage.getItem('panicUrl') || "https://google.com";
+        if (!isTyping && e.key === savedShortcut && savedShortcut !== "") {
+            let url = savedLink.startsWith('http') ? savedLink : 'https://' + savedLink;
+            window.location.href = url;
         }
-    };
+    });
 
-    // 7. INITIALIZE HERO UI
+    if (settingsBtn) settingsBtn.onclick = () => settingsModal.style.display = 'flex';
+    if (closeSettings) closeSettings.onclick = () => settingsModal.style.display = 'none';
+
     const popular = getMostPopular();
-    if (popular.length > 0) {
+    if (popular && popular.length > 0) {
         const titleEl = document.getElementById('hero-title');
         const descEl = document.getElementById('hero-desc');
         if (titleEl) titleEl.textContent = popular[0].title;
@@ -162,8 +184,11 @@ document.addEventListener('DOMContentLoaded', () => {
     const randomBtn = document.getElementById('randomBtn');
     if (randomBtn) {
         randomBtn.onclick = () => {
-            const rand = _0xData[Math.floor(Math.random() * _0xData.length)];
-            launchGame(rand.id);
+            // Fixed: changed 'games' to '_0xData'
+            if (_0xData.length > 0) {
+                const rand = _0xData[Math.floor(Math.random() * _0xData.length)];
+                launchGame(rand.id);
+            }
         };
     }
 });
