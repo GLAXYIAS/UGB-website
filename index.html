@@ -9,24 +9,20 @@
 <body>
   <div class="dashboard">
     
-    <!-- Left Sidebar -->
-<aside class="left-nav">
-  <div class="logo">
-    <img src="imgs/Screenshot 2026-01-27 8.17.07 PM.png" 
-         alt="Null_X Logo" 
-         class="site-logo">
-  </div>
-  
-  <nav>
-    <a href="#" class="nav-item active" id="nav-home">Home</a>
-    <a href="#" class="nav-item" id="nav-games">Games</a>
-    <a href="#" class="nav-item" id="nav-favorites">Favorites</a>
-    <a href="#" class="nav-item" id="nav-unblockers">Unblockers</a>
-    <a href="#" class="nav-item" id="nav-communications">Communications</a>
-  </nav>
-</aside>
+    <aside class="left-nav">
+      <div class="logo">
+        <img src="imgs/Screenshot 2026-01-27 8.17.07 PM.png" alt="Null_X Logo" class="site-logo">
+      </div>
+      
+      <nav>
+        <a href="#" class="nav-item active" id="nav-home">Home</a>
+        <a href="#" class="nav-item" id="nav-games">Games</a>
+        <a href="#" class="nav-item" id="nav-favorites">Favorites</a>
+        <a href="#" class="nav-item" id="nav-unblockers">Unblockers</a>
+        <a href="#" class="nav-item" id="nav-communications">Communications</a>
+      </nav>
+    </aside>
 
-    <!-- Main Content -->
     <main class="main-content">
       
       <header class="top-bar">
@@ -40,7 +36,7 @@
         </div>
       </header>
 
-      <section class="hero">
+      <section class="hero" id="heroSection">
         <div class="hero-content">
           <span class="badge">Featured</span>
           <h2 id="hero-title">Loading...</h2>
@@ -59,66 +55,64 @@
 
       <section class="section">
         <div class="game-grid" id="gameGrid">
-          <!-- Games will go here -->
-        </div>
+          </div>
       </section>
     </main>
 
-    <!-- Right Sidebar -->
     <aside class="right-sidebar">
       <button class="signin-btn" id="signInBtn">Sign In</button>
       <button class="settings-btn" id="settingsBtn">Settings</button>
     </aside>
   </div>
 
-  <script type="module" src="JS/main.js"></script>
   <div id="settingsModal" class="modal-overlay">
-  <div class="modal-box">
-    <span class="close-x" id="closeSettings">&times;</span>
+    <div class="modal-box">
+      <span class="close-x" id="closeSettings">&times;</span>
 
-    <h1 class="glow">Settings</h1>
-    <p class="subtitle">Personalize your Null_X dashboard</p>
-    <hr class="settings-divider">
+      <h1 class="glow">Settings</h1>
+      <p class="subtitle">Personalize your Null_X dashboard</p>
+      <hr class="settings-divider">
 
-    <div class="setting-section">
-      <h3>Appearance</h3>
-      <p class="setting-label">Select Theme:</p>
-      <div class="theme-grid">
-        <div class="theme-card" data-theme="default">
-          <div class="preview purple-preview"></div>
-          <span>Default Purple</span>
+      <div class="setting-section">
+        <h3>Appearance</h3>
+        <p class="setting-label">Select Theme:</p>
+        <div class="theme-grid">
+          <div class="theme-card" data-theme="default">
+            <div class="preview purple-preview"></div>
+            <span>Default Purple</span>
+          </div>
+          <div class="theme-card" data-theme="midnight">
+            <div class="preview midnight-preview"></div>
+            <span>Midnight</span>
+          </div>
         </div>
-        <div class="theme-card" data-theme="midnight">
-          <div class="preview midnight-preview"></div>
-          <span>Midnight</span>
+      </div>
+
+      <div class="setting-section">
+        <h3>Privacy</h3>
+        <label for="cloakSelector" class="setting-label">Tab Cloak:</label>
+        <select id="cloakSelector" class="settings-input">
+          <option value="none">None (Default)</option>
+          <option value="Google Classroom">Google Classroom</option>
+          <option value="Google Drive">Google Drive</option>
+        </select>
+      </div>
+
+      <div class="setting-section">
+        <h3>Panic Button</h3>
+        <div class="panic-inputs">
+          <p class="setting-label">Custom Shortcut Key:</p>
+          <input type="text" id="panicShortcut" placeholder="Click and press a key..." readonly>
+          
+          <p class="setting-label">Redirect URL:</p>
+          <input type="text" id="panicLink" placeholder="https://classroom.google.com">
+          
+          <button id="savePanic" class="save-btn">Save Panic Settings</button>
         </div>
       </div>
     </div>
-
-    <div class="settings-group">
-    <label for="cloakSelector">Tab Cloak:</label>
-    <select id="cloakSelector" class="settings-input">
-        <option value="none">None (Default)</option>
-        <option value="Google Classroom">Google Classroom</option>
-        <option value="Google Drive">Google Drive</option>
-    </select>
-</div>
-
-    <div class="setting-section">
-      <h3>Panic Button</h3>
-      <div class="panic-inputs">
-        <p class="setting-label">Custom Shortcut Key:</p>
-        <input type="text" id="panicShortcut" placeholder="Click and press a key..." readonly>
-        
-        <p class="setting-label">Redirect URL:</p>
-        <input type="text" id="panicLink" placeholder="https://classroom.google.com">
-        
-        <button id="savePanic" class="save-btn">Save Panic Settings</button>
-      </div>
-    </div>
-
   </div>
-</div>
-</div>
+
+  <script type="module" src="JS/main.js"></script>
 </body>
 </html>
