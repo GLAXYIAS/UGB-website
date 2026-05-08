@@ -1,35 +1,39 @@
 import { applyCloak } from '../Cloaks/Cloaks.js';
 
-// --- DATA HARDCODED & ENCODED ---
 const _0xData = [
   {
     id: "s_lp",
     title: atob("U2xvcGU="), 
+    url: "Games/slope/index.html",
     desc: "A fast-paced 3D platformer. Stay on the track!",
     popular: true
   },
   {
     id: "d_md",
     title: atob("RHJpdmUgTWFk"), 
+    url: "Games/drivemad/index.html",
     desc: "Challenging physics-based driving. Don't flip your truck!",
     popular: true
   },
   {
     id: "b_ft",
     title: atob("QnVsbGV0IEZvcmNl"), 
+    url: "Games/bulletforce/index.html",
     desc: "Action-packed multiplayer FPS. Dominate the battlefield.",
     popular: true
   },
   {
     id: "p_em",
     title: atob("UG9rZW1vbiBFbWVyYWxk"), 
+    url: "Games/pokemon-emerald/index.html",
     desc: "The classic GBA adventure. Become the Hoenn Champion!",
     popular: true
   },
   {
     id: "b_to",
     title: atob("QnJvdGF0bw=="), 
-    desc: "A top-down arena shooter roguelite where you play a potato.",
+    url: "Games/brotato/index.html",
+    desc: "A top-down arena shooter roguelite where you play a potato wielding up to 6 weapons at a time.",
     popular: true
   }
 ];
@@ -39,16 +43,14 @@ function getMostPopular() {
 }
 
 document.addEventListener('DOMContentLoaded', () => {
-    // 1. PERSISTENCE (Theme & Cloak)
     const savedTheme = localStorage.getItem('selectedTheme');
     if (savedTheme) applyTheme(savedTheme);
 
     const savedCloak = localStorage.getItem('savedCloak');
     if (savedCloak && savedCloak !== "none") {
-        try { applyCloak(savedCloak); } catch (e) { console.error("Cloak init error"); }
+        try { applyCloak(savedCloak); } catch (e) { console.error(e); }
     }
 
-    // 2. SELECTORS
     const settingsModal = document.getElementById('settingsModal');
     const settingsBtn = document.getElementById('settingsBtn');
     const closeSettings = document.getElementById('closeSettings');
@@ -71,13 +73,14 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    // 3. LAUNCHER (Standard ID Method)
+    // DIRECT LOAD LAUNCHER (No iframes)
     function launchGame(gameId) {
-        // Navigates to player with just the ID
-        window.location.href = `Games/game-player.html?id=${gameId}`;
+        const game = _0xData.find(g => g.id === gameId);
+        if (game) {
+            window.location.href = game.url;
+        }
     }
 
-    // 4. UI RENDERING
     function showLibrary() {
         if (heroSection) heroSection.style.display = 'none';
         if (gameGrid) {
@@ -101,7 +104,6 @@ document.addEventListener('DOMContentLoaded', () => {
         if (gameGrid) gameGrid.style.display = 'none';
     }
 
-    // 5. EVENT LISTENERS
     if (navGames) navGames.onclick = (e) => { e.preventDefault(); showLibrary(); };
     if (navHome) navHome.onclick = (e) => { e.preventDefault(); showHome(); };
 
@@ -113,9 +115,7 @@ document.addEventListener('DOMContentLoaded', () => {
         cloakSelector.onchange = (e) => {
             const val = e.target.value;
             if (val === "none") {
-                localStorage.removeItem('savedCloak');
-                localStorage.removeItem('cloakTitle');
-                localStorage.removeItem('cloakIcon');
+                localStorage.clear();
                 location.reload(); 
             } else {
                 applyCloak(val);
@@ -123,38 +123,17 @@ document.addEventListener('DOMContentLoaded', () => {
         };
     }
 
-    // 6. PANIC BUTTON
-    let savedShortcut = localStorage.getItem('panicKey') || "";
-    let savedLink = localStorage.getItem('panicUrl') || "https://google.com";
-    const panicInput = document.getElementById('panicShortcut');
-    const panicLinkInput = document.getElementById('panicLink');
-    const savePanicBtn = document.getElementById('savePanic');
-
-    if (panicInput) panicInput.value = savedShortcut;
-    if (panicLinkInput) panicLinkInput.value = savedLink;
-    if (savePanicBtn) {
-        savePanicBtn.onclick = () => {
-            localStorage.setItem('panicKey', panicInput.value);
-            localStorage.setItem('panicUrl', panicLinkInput.value);
-            alert("Panic settings saved!");
-        };
+    const popular = getMostPopular();
+    if (popular.length > 0) {
+        document.getElementById('hero-title').textContent = popular[0].title;
+        document.getElementById('hero-desc').textContent = popular[0].desc;
+        document.getElementById('playFeatured').onclick = () => launchGame(popular[0].id);
     }
 
     window.onkeydown = (e) => {
-        const isTyping = e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA';
-        if (!isTyping && e.key === localStorage.getItem('panicKey')) {
+        const panicKey = localStorage.getItem('panicKey');
+        if (e.key === panicKey) {
             window.location.href = localStorage.getItem('panicUrl') || "https://google.com";
         }
     };
-
-    // 7. HERO INITIALIZATION
-    const popular = getMostPopular();
-    if (popular.length > 0) {
-        const titleEl = document.getElementById('hero-title');
-        const descEl = document.getElementById('hero-desc');
-        if (titleEl) titleEl.textContent = popular[0].title;
-        if (descEl) descEl.textContent = popular[0].desc;
-        const playBtn = document.getElementById('playFeatured'); 
-        if (playBtn) playBtn.onclick = () => launchGame(popular[0].id);
-    }
 });
