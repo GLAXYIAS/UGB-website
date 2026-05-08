@@ -1,114 +1,19 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Null_X</title>
-    <link rel="stylesheet" href="../CSS/style.css"> <style>
-        body, html {
-            margin: 0;
-            padding: 0;
-            width: 100%;
-            height: 100%;
-            overflow: hidden;
-            background-color: #000;
-        }
-        #game-container {
-            width: 100%;
-            height: 100%;
-            display: flex;
-            flex-direction: column;
-        }
-        #nav-bar {
-            height: 40px;
-            background: #1a1a1a;
-            display: flex;
-            align-items: center;
-            padding: 0 20px;
-            border-bottom: 2px solid #8b00ff;
-        }
-        .back-btn {
-            color: white;
-            text-decoration: none;
-            font-family: sans-serif;
-            font-weight: bold;
-            background: #333;
-            padding: 5px 15px;
-            border-radius: 5px;
-            transition: 0.3s;
-        }
-        .back-btn:hover {
-            background: #444;
-            color: #8b00ff;
-        }
-        iframe {
-            flex-grow: 1;
-            border: none;
-            width: 100%;
-            height: 100%;
-        }
-    </style>
-</head>
-<body>
+<script type="module">
+    // --- 1. THE NUCLEAR STEALTH LOCK (Keep your existing lock code here) ---
+    const currentTitle = localStorage.getItem('cloakTitle') || "Null_X";
+    const currentIcon = localStorage.getItem('cloakIcon') || "../imgs/favicon.png";
+    document.title = currentTitle;
+    try { Object.defineProperty(document, 'title', { value: currentTitle, writable: false }); } catch (e) {}
 
-    <div id="game-container">
-        <div id="nav-bar">
-            <a href="../index.html" class="back-btn">← Back</a>
-        </div>
-        <iframe id="game-frame" src=""></iframe>
-    </div>
+    // --- 2. UNIVERSAL LOADING LOGIC ---
+    const urlParams = new URLSearchParams(window.location.search);
+    const folderName = urlParams.get('folder'); // It pulls the folder name from the URL
+    const iframe = document.getElementById('game-frame');
 
-    <script type="module">
-        // --- 1. THE NUCLEAR STEALTH LOCK ---
-        const currentTitle = localStorage.getItem('cloakTitle') || "Null_X";
-        const currentIcon = localStorage.getItem('cloakIcon') || "../imgs/favicon.png";
-
-        // Lock the Title (Prevents Slope/Unity from changing it)
-        document.title = currentTitle;
-        try {
-            Object.defineProperty(document, 'title', {
-                value: currentTitle,
-                writable: false,
-                configurable: false
-            });
-        } catch (e) {
-            console.log("Title lock active via interval fallback.");
-            setInterval(() => { document.title = currentTitle; }, 500);
-        }
-
-        // Lock the Icon
-        function applyStealthIcon() {
-            let link = document.querySelector("link[rel~='icon']");
-            if (!link) {
-                link = document.createElement('link');
-                link.rel = 'icon';
-                document.head.appendChild(link);
-            }
-            link.href = currentIcon;
-        }
-        applyStealthIcon();
-        setInterval(applyStealthIcon, 1000);
-
-
-        // --- 2. GAME LOADING LOGIC ---
-        const urlParams = new URLSearchParams(window.location.search);
-        const gameId = urlParams.get('id');
-        const iframe = document.getElementById('game-frame');
-
-        // Maps your stealth IDs from main.js to actual folders
-        const gamePaths = {
-            "s_lp": "slope/index.html",
-            "d_md": "drivemad/index.html",
-            "b_ft": "bulletforce/index.html",
-            "p_em": "pokemon-emerald/index.html"
-        };
-
-        if (gameId && gamePaths[gameId]) {
-            iframe.src = gamePaths[gameId];
-        } else {
-            // Fallback if someone enters the page without an ID
-            window.location.href = "../index.html";
-        }
-    </script>
-</body>
-</html>
+    if (folderName) {
+        // Automatically loads: folder/index.html
+        iframe.src = `${folderName}/index.html`;
+    } else {
+        window.location.href = "../index.html";
+    }
+</script>
