@@ -5,36 +5,36 @@ const _0xData = [
   {
     id: "s_lp",
     title: atob("U2xvcGU="), 
-    path: "slope",
+    url: "Games/slope/index.html",
     desc: "A fast-paced 3D platformer. Stay on the track!",
     popular: true
   },
   {
     id: "d_md",
     title: atob("RHJpdmUgTWFk"), 
-    path: "drivemad",
+    url: "Games/drivemad/index.html",
     desc: "Challenging physics-based driving. Don't flip your truck!",
     popular: true
   },
   {
     id: "b_ft",
     title: atob("QnVsbGV0IEZvcmNl"), 
-    path: "bulletforce",
+    url: "Games/bulletforce/index.html",
     desc: "Action-packed multiplayer FPS. Dominate the battlefield.",
     popular: true
   },
   {
     id: "p_em",
     title: atob("UG9rZW1vbiBFbWVyYWxk"), 
-    path: "pokemon-emerald",
+    url: "Games/pokemon-emerald/index.html",
     desc: "The classic GBA adventure. Become the Hoenn Champion!",
     popular: true
   },
   {
     id: "b_to",
     title: atob("QnJvdGF0bw=="), 
-    path: "brotato",
-    desc: "A top-down arena shooter roguelite where you play a potato.",
+    url: "Games/brotato/index.html",
+    desc: "A top-down arena shooter roguelite where you play a potato wielding up to 6 weapons at a time.",
     popular: true
   }
 ];
