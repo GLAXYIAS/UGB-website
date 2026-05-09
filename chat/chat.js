@@ -1,10 +1,10 @@
 // chat/chat.js
 
-// Matches your General Settings Project ID
-const SUPABASE_URL = 'https://abujajuzsiqjksabvybi.supabase.co'; 
+// Using your corrected URL
+const SUPABASE_URL = 'https://ukwjojxutcjkvabnybtj.supabase.co'; 
 
-// Matches your API Keys screenshot (Legacy anon/public)
-const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImFidWpajuzsiqjksabvybiIsInJvbGUiOiJhbm9uIiwiaWF0IjoxNzE1MTk2NDA0LCJleHAiOjIwMzA3NzI0MDR9.Hj0q00y05YfXG1Z9fXG1Z9fXG1Z9fXG1Z9fXG1Z9fXG'; 
+// Using the key you provided that matches this URL
+const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InVrd2pvanh1dGNqa3ZhYm55YnRqIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzgyNzk5NDAsImV4cCI6MjA5Mzg1NTk0MH0.iLr9OrIZlRBrbcI1XDE0zl7t_wpwVg3ko3DgppxbUh8'; 
 
 document.addEventListener('DOMContentLoaded', () => {
     const user = localStorage.getItem('chatUser');
@@ -13,6 +13,7 @@ document.addEventListener('DOMContentLoaded', () => {
         return;
     }
 
+    // Tab Cloak
     document.title = "Grades";
     Object.defineProperty(document, 'title', { value: 'Grades', writable: false });
 
@@ -23,6 +24,7 @@ document.addEventListener('DOMContentLoaded', () => {
     async function fetchMessages() {
         try {
             const response = await fetch(`${SUPABASE_URL}/rest/v1/messages?select=*&order=created_at.asc`, {
+                method: 'GET',
                 headers: {
                     'apikey': SUPABASE_KEY,
                     'Authorization': `Bearer ${SUPABASE_KEY}`
@@ -31,7 +33,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const data = await response.json();
             
             if (messageContainer && Array.isArray(data)) {
-                messageContainer.innerHTML = '';
+                messageContainer.innerHTML = ''; 
                 data.forEach(msg => {
                     const msgDiv = document.createElement('div');
                     msgDiv.className = 'message';
@@ -55,7 +57,10 @@ document.addEventListener('DOMContentLoaded', () => {
                     'Content-Type': 'application/json',
                     'Prefer': 'return=minimal'
                 },
-                body: JSON.stringify({ username: user, content: text })
+                body: JSON.stringify({ 
+                    username: user, 
+                    content: text 
+                })
             });
             fetchMessages(); 
         } catch (err) {
@@ -74,6 +79,6 @@ document.addEventListener('DOMContentLoaded', () => {
         };
     }
 
-    setInterval(fetchMessages, 2500);
+    setInterval(fetchMessages, 2000);
     fetchMessages();
 });
