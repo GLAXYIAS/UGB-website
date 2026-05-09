@@ -1,17 +1,34 @@
-// REPLACE THESE WITH YOUR ACTUAL DATA
+// REPLACE THESE WITH THE KEYS FROM YOUR SUPABASE DASHBOARD
 const SUPABASE_URL = 'https://abujajuzsiqjksabvybi.supabase.co'; 
 const SUPABASE_KEY = 'sb_publishable_p-LIu9LC5FT-KprFOosVTw_Y16KCLAN';
 
 document.addEventListener('DOMContentLoaded', () => {
+    // 1. PULL FROM LOGIN: Check if user is authenticated
+    const user = localStorage.getItem('chatUser');
+    
+    if (!user) {
+        // Kick out to login if no session is found
+        window.location.href = "../Login/login.html";
+        return;
+    }
+
+    // 2. TAB CLOAK: Force title to stay "Grades"
+    document.title = "Grades";
+    // This prevents any other scripts from changing the name back
+    Object.defineProperty(document, 'title', {
+        value: 'Grades',
+        writable: false
+    });
+
     const messageContainer = document.getElementById('chat-messages');
     const chatForm = document.getElementById('chat-form');
     const messageInput = document.getElementById('message-input');
     const usernameDisplay = document.getElementById('username-display');
 
-    // Guest name setup
-    let user = localStorage.getItem('chatUser') || "Guest_" + Math.floor(Math.random() * 9999);
-    localStorage.setItem('chatUser', user);
+    // Display the logged-in username
     if (usernameDisplay) usernameDisplay.textContent = user;
+
+    // --- DATABASE LOGIC ---
 
     async function fetchMessages() {
         try {
@@ -34,7 +51,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 messageContainer.scrollTop = messageContainer.scrollHeight;
             }
         } catch (err) {
-            console.error("Connection lost:", err);
+            console.error("Connection error:", err);
         }
     }
 
@@ -48,7 +65,10 @@ document.addEventListener('DOMContentLoaded', () => {
                     'Content-Type': 'application/json',
                     'Prefer': 'return=minimal'
                 },
-                body: JSON.stringify({ username: user, content: text })
+                body: JSON.stringify({ 
+                    username: user, // Sends the username pulled from Login
+                    content: text 
+                })
             });
             fetchMessages(); 
         } catch (err) {
@@ -67,6 +87,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
+    // Auto-refresh messages every 2.5 seconds
     setInterval(fetchMessages, 2500); 
     fetchMessages(); 
 });
