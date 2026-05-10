@@ -6,28 +6,34 @@ const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZ
 document.addEventListener('DOMContentLoaded', () => {
     const user = localStorage.getItem('chatUser');
     
-    // Kick out if not signed in
+    // Security: Redirect to login if no user found
     if (!user) {
         window.location.href = "../Login/login.html";
         return;
     }
 
-    // Inject Name & Tab Cloak
+    // Sidebar & Tab Cloak
     const nameDisplay = document.getElementById('username-display');
     if (nameDisplay) nameDisplay.textContent = user;
     
     document.title = "Grades";
     Object.defineProperty(document, 'title', { value: 'Grades', writable: false });
 
-    // --- SPAM PROTECTION VARS ---
+    // Spam Protection Variables
     let lastMessageTime = 0;
     let isLockedOut = false;
-    const cooldownMs = 1500; // Speed limit (1.5s)
-    const lockoutMs = 15000; // Jail time (15s)
+    const cooldownMs = 1500; // Speed limit
+    const lockoutMs = 15000; // 15-second jail
 
     const messageContainer = document.getElementById('chat-messages');
     const chatForm = document.getElementById('chat-form');
     const messageInput = document.getElementById('message-input');
+
+    // Helper: Format Supabase timestamp to HH:MM
+    function formatTime(ts) {
+        const date = new Date(ts);
+        return date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+    }
 
     async function fetchMessages() {
         try {
@@ -40,24 +46,28 @@ document.addEventListener('DOMContentLoaded', () => {
             const data = await response.json();
             
             if (messageContainer && Array.isArray(data)) {
-                messageContainer.innerHTML = '';
+                // Keep the system welcome message
+                messageContainer.innerHTML = '<div class="message system">Welcome to the encrypted comms.</div>';
                 
                 data.forEach(msg => {
                     const msgDiv = document.createElement('div');
-                    
-                    // Logic: Is this MY message?
                     const isMe = msg.username === user;
+                    
                     msgDiv.className = `message ${isMe ? 'my-message' : 'other-message'}`;
                     
+                    const time = formatTime(msg.created_at);
+
                     msgDiv.innerHTML = `
-                        <small>${msg.username}</small>
-                        <span>${msg.content}</span>
+                        <div class="msg-info">
+                            <strong>${msg.username}</strong>
+                            <span>${time}</span>
+                        </div>
+                        <div class="msg-text">${msg.content}</div>
                     `;
                     
                     messageContainer.appendChild(msgDiv);
                 });
                 
-                // Keep the chat scrolled to the bottom
                 messageContainer.scrollTop = messageContainer.scrollHeight;
             }
         } catch (err) {
@@ -68,20 +78,20 @@ document.addEventListener('DOMContentLoaded', () => {
     async function sendMessage(text) {
         const currentTime = Date.now();
         
-        // 1. Check if currently in 15s jail
         if (isLockedOut) return;
 
-        // 2. Check if sending too fast (Spam Trigger)
+        // Spam Check
         if (currentTime - lastMessageTime < cooldownMs) {
             isLockedOut = true;
             messageInput.disabled = true;
-            messageInput.value = "";
+            const originalPlaceholder = messageInput.placeholder;
             messageInput.placeholder = "Spam Detected! Wait 15s...";
+            messageInput.value = "";
             
             setTimeout(() => {
                 isLockedOut = false;
                 messageInput.disabled = false;
-                messageInput.placeholder = "Type a message...";
+                messageInput.placeholder = originalPlaceholder;
                 messageInput.focus();
             }, lockoutMs);
 
@@ -91,7 +101,7 @@ document.addEventListener('DOMContentLoaded', () => {
         lastMessageTime = currentTime;
 
         try {
-            const res = await fetch(`${SUPABASE_URL}/rest/v1/messages`, {
+            await fetch(`${SUPABASE_URL}/rest/v1/messages`, {
                 method: 'POST',
                 headers: {
                     'apikey': SUPABASE_KEY,
@@ -104,16 +114,12 @@ document.addEventListener('DOMContentLoaded', () => {
                     content: text 
                 })
             });
-
-            if (res.ok) {
-                fetchMessages(); 
-            }
+            fetchMessages(); 
         } catch (err) {
             console.error("Send Error:", err);
         }
     }
 
-    // Handle Form Submit
     if (chatForm) {
         chatForm.onsubmit = (e) => {
             e.preventDefault();
@@ -125,7 +131,7 @@ document.addEventListener('DOMContentLoaded', () => {
         };
     }
 
-    // Update messages every 2.5 seconds
+    // Polling for new messages every 2.5 seconds
     setInterval(fetchMessages, 2500);
     fetchMessages();
 });
