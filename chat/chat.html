@@ -12,11 +12,23 @@
             <div class="sidebar-header">
                 <h2>Channels</h2>
             </div>
+            
             <div class="channel-list">
                 <div class="channel active"># general</div>
                 <div class="channel"># games</div>
                 <div class="channel"># dev-logs</div>
             </div>
+
+            <div id="admin-section" style="display: none;">
+                <h3 style="color: #ff4444; font-size: 12px; margin-bottom: 8px; text-align: center;">ADMIN PANEL</h3>
+                <input type="text" id="admin-target-user" placeholder="Target Username...">
+                <div style="display: flex; gap: 4px;">
+                    <button class="admin-btn btn-warn" onclick="adminAction('warn')">Warn</button>
+                    <button class="admin-btn btn-ban" onclick="adminAction('ban')">Ban</button>
+                    <button class="admin-btn btn-tag" onclick="adminAction('tag')">Tag</button>
+                </div>
+            </div>
+
             <div class="user-profile">
                 <div class="avatar"></div>
                 <span id="username-display"></span>
