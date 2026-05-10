@@ -94,7 +94,7 @@ body {
 .btn-ban { background: #ff4444; color: #fff; }
 .btn-tag { background: #4444ff; color: #fff; }
 
-/* User Profile at bottom of sidebar */
+/* User Profile at bottom */
 .user-profile {
     padding: 15px;
     background: #080808;
@@ -145,12 +145,7 @@ body {
     padding: 10px 15px;
     border-radius: 12px;
     line-height: 1.4;
-}
-
-.system {
-    align-self: center;
-    color: #555;
-    font-size: 12px;
+    position: relative;
 }
 
 .my-message {
@@ -167,10 +162,31 @@ body {
     border-bottom-left-radius: 2px;
 }
 
+/* Admin Delete Button styling */
+.delete-btn {
+    background: none;
+    border: none;
+    color: #666;
+    cursor: pointer;
+    font-size: 16px;
+    margin-left: 8px;
+    transition: 0.2s;
+}
+
+.delete-btn:hover {
+    color: #ff4444;
+}
+
+/* Deleted Message Look */
+.message-deleted {
+    font-style: italic;
+    opacity: 0.5;
+}
+
 .msg-info {
     display: flex;
     justify-content: space-between;
-    gap: 15px;
+    align-items: center;
     font-size: 10px;
     margin-bottom: 5px;
     opacity: 0.8;
@@ -195,8 +211,6 @@ body {
     outline: none;
 }
 
-#message-input:focus { border-color: #8b00ff; }
-
 button[type="submit"] {
     background: #8b00ff;
     color: white;
@@ -207,6 +221,6 @@ button[type="submit"] {
     cursor: pointer;
 }
 
-/* Scrollbar */
+/* Custom Scrollbar */
 .messages-container::-webkit-scrollbar { width: 5px; }
 .messages-container::-webkit-scrollbar-thumb { background: #333; border-radius: 10px; }
