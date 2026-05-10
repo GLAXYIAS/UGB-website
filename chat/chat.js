@@ -4,7 +4,7 @@ const SUPABASE_URL = 'https://ukwjojxutcjkvabnybtj.supabase.co';
 const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InVrd2pvanh1dGNqa3ZhYm55YnRqIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzgyNzk5NDAsImV4cCI6MjA5Mzg1NTk0MH0.iLr9OrIZlRBrbcI1XDE0zl7t_wpwVg3ko3DgppxbUh8'; 
 
 // --- ADMIN CONFIG ---
-const ADMIN_NAME = "glaeesas";
+const ADMIN_NAME = "Glaeesas";
 const ADMIN_SECRET = "TEST";
 
 document.addEventListener('DOMContentLoaded', () => {
