@@ -1,25 +1,22 @@
-// chat/chat.js
 const SUPABASE_URL = 'https://ukwjojxutcjkvabnybtj.supabase.co'; 
 const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InVrd2pvanh1dGNqa3ZhYm55YnRqIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzgyNzk5NDAsImV4cCI6MjA5Mzg1NTk0MH0.iLr9OrIZlRBrbcI1XDE0zl7t_wpwVg3ko3DgppxbUh8'; 
 
 document.addEventListener('DOMContentLoaded', () => {
     const user = localStorage.getItem('chatUser');
     
-    // Kick them out if not signed in
     if (!user) {
         window.location.href = "../Login/login.html";
         return;
     }
 
-    // Inject the name into the empty span
     const nameDisplay = document.getElementById('username-display');
-    if (nameDisplay) {
-        nameDisplay.textContent = user;
-    }
+    if (nameDisplay) nameDisplay.textContent = user;
 
-    // Tab Cloaking
-    document.title = "Grades";
-    Object.defineProperty(document, 'title', { value: 'Grades', writable: false });
+    // --- SPAM PROTECTION VARIABLES ---
+    let lastMessageTime = 0;
+    let isLockedOut = false;
+    const cooldownMs = 1500; // Minimum time between messages (1.5 seconds)
+    const lockoutMs = 15000; // Punishment time (15 seconds)
 
     const messageContainer = document.getElementById('chat-messages');
     const chatForm = document.getElementById('chat-form');
@@ -45,6 +42,31 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     async function sendMessage(text) {
+        // --- SPAM CHECK LOGIC ---
+        const currentTime = Date.now();
+        
+        if (isLockedOut) {
+            alert("Slow down! You are locked out for 15 seconds.");
+            return;
+        }
+
+        if (currentTime - lastMessageTime < cooldownMs) {
+            isLockedOut = true;
+            messageInput.disabled = true;
+            messageInput.placeholder = "Spam detected! Wait 15s...";
+            
+            setTimeout(() => {
+                isLockedOut = false;
+                messageInput.disabled = false;
+                messageInput.placeholder = "Type a message...";
+                messageInput.focus();
+            }, lockoutMs);
+
+            return;
+        }
+
+        lastMessageTime = currentTime;
+
         try {
             await fetch(`${SUPABASE_URL}/rest/v1/messages`, {
                 method: 'POST',
@@ -64,7 +86,10 @@ document.addEventListener('DOMContentLoaded', () => {
         chatForm.onsubmit = (e) => {
             e.preventDefault();
             const text = messageInput.value.trim();
-            if (text) { sendMessage(text); messageInput.value = ""; }
+            if (text) { 
+                sendMessage(text); 
+                messageInput.value = ""; 
+            }
         };
     }
 
