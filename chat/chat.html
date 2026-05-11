@@ -70,6 +70,20 @@
                     </div>
 
                     <div class="admin-card">
+    <h3>Temporary Ban</h3>
+    <div class="search-wrapper">
+        <input type="text" id="temp-ban-search" placeholder="User to temp ban (@...)" oninput="handleAdminSearch(this.value, 'temp-ban-search')">
+    </div>
+    <select id="temp-ban-duration">
+        <option value="1">1 Minute (Testing)</option>
+        <option value="60">1 Hour</option>
+        <option value="1440">24 Hours</option>
+        <option value="10080">1 Week</option>
+    </select>
+    <textarea id="temp-ban-reason" placeholder="Reason for temp ban..." class="bulk-area"></textarea>
+    <button class="admin-btn btn-ban" onclick="executeTempBan()">Apply Temp Ban</button>
+</div>
+                    <div class="admin-card">
                         <h3>Bans</h3>
                         <div class="search-wrapper">
                             <input type="text" id="ban-search" placeholder="Type @ to find user...">
