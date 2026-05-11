@@ -4,26 +4,21 @@ const DB_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJ
 
 async function runSecurityCheck() {
     const user = localStorage.getItem('chatUser');
-    const overlay = document.getElementById('lockdown-overlay');
-
-    // If the overlay doesn't exist on the page, create it dynamically
+    
+    // 1. Find or Create the overlay
+    let overlay = document.getElementById('lockdown-overlay');
     if (!overlay) {
-        const newOverlay = document.createElement('div');
-        newOverlay.id = 'lockdown-overlay';
-        newOverlay.style.cssText = "display:none; position:fixed; inset:0; background:black; z-index:999999; flex-direction:column; align-items:center; justify-content:center; text-align:center; padding:20px; font-family:sans-serif;";
-        newOverlay.innerHTML = `
-            <h1 id="lockdown-title" style="color:red; font-size:40px; margin-bottom:20px;">ACCESS DENIED</h1>
-            <p id="lockdown-msg" style="color:white; font-size:18px; margin-bottom:10px;"></p>
-            <div id="lockdown-timer" style="color:#ff4444; font-size:24px; font-weight:bold; font-family:monospace;"></div>
-        `;
-        document.body.appendChild(newOverlay);
+        overlay = document.createElement('div');
+        overlay.id = 'lockdown-overlay';
+        // IMPORTANT: We set it to NONE immediately here
+        overlay.style.display = 'none'; 
+        document.body.appendChild(overlay);
     }
 
-    const activeOverlay = document.getElementById('lockdown-overlay');
-
+    // 2. If no user, hide and stop
     if (!user) {
-        activeOverlay.style.display = 'none';
-        return; 
+        overlay.style.display = 'none';
+        return;
     }
 
     try {
@@ -31,51 +26,31 @@ async function runSecurityCheck() {
             headers: { 'apikey': DB_KEY, 'Authorization': `Bearer ${DB_KEY}` }
         });
         const data = await res.json();
-        const profile = data[0];
+        
+        // 3. Logic Gate
+        if (data && data.length > 0) {
+            const profile = data[0];
 
-        if (!profile) {
-            activeOverlay.style.display = 'none';
-            return;
-        }
+            if (profile.is_banned === true) {
+                overlay.style.display = 'flex'; // ONLY SHOW IF BANNED
+                overlay.innerHTML = `<h1 style="color:red;">BANNED</h1><p style="color:white;">${profile.last_action_reason || ""}</p>`;
+                return;
+            }
 
-        // --- PERMANENT BAN ---
-        if (profile.is_banned) {
-            activeOverlay.style.display = 'flex';
-            document.getElementById('lockdown-title').innerText = "YOU ARE PERMANENTLY BANNED";
-            document.getElementById('lockdown-msg').innerText = `Reason: ${profile.last_action_reason || "Violation of terms."}`;
-            return;
-        }
-
-        // --- TEMPORARY BAN ---
-        if (profile.temp_ban_until) {
-            const expiry = new Date(profile.temp_ban_until);
-            if (expiry > new Date()) {
-                activeOverlay.style.display = 'flex';
-                document.getElementById('lockdown-title').innerText = "YOU ARE TEMPORARILY BANNED";
-                
-                const timerInterval = setInterval(() => {
-                    const diff = expiry - new Date();
-                    if (diff <= 0) {
-                        clearInterval(timerInterval);
-                        location.reload();
-                    }
-                    const h = Math.floor(diff / 3600000);
-                    const m = Math.floor((diff % 3600000) / 60000);
-                    const s = Math.floor((diff % 60000) / 1000);
-                    document.getElementById('lockdown-timer').innerText = `Unban in: ${h}h ${m}m ${s}s`;
-                }, 1000);
+            if (profile.temp_ban_until && new Date(profile.temp_ban_until) > new Date()) {
+                overlay.style.display = 'flex'; // ONLY SHOW IF TEMP BANNED
+                overlay.innerHTML = `<h1 style="color:red;">TEMP BAN</h1><div id="lockdown-timer" style="color:white;"></div>`;
                 return;
             }
         }
 
-        // If no ban active, ensure it's hidden
-        activeOverlay.style.display = 'none';
+        // 4. FORCE HIDE IF WE GET HERE
+        overlay.style.display = 'none';
+        console.log("Security Check: User is clean. Hiding overlay.");
 
     } catch (err) {
-        console.error("Guard failed:", err);
-        if (activeOverlay) activeOverlay.style.display = 'none';
+        overlay.style.display = 'none';
+        console.error("Guard Error:", err);
     }
 }
-
-// Run immediately
 runSecurityCheck();
