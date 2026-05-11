@@ -3,48 +3,56 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Grades | Profile</title>
+    <title>NULL_X | Profile</title>
     <link rel="stylesheet" href="profile.css">
 </head>
 <body>
-    <div class="profile-container">
+    <div class="hub-container">
         <div class="sidebar">
-            <div class="sidebar-header">
-                <h2>Grades</h2>
+            <div class="logo">
+                <h2 style="color:white; padding: 20px;">Nx</h2>
             </div>
-            <div class="nav-links">
-                <a href="../chat/chat.html" class="nav-item">← Back to Chat</a>
-            </div>
+            <nav>
+                <a href="../main/index.html" class="nav-item">Home</a>
+                <a href="#" class="nav-item active">Profile</a>
+                <a href="../chat/chat.html" class="nav-item">Communications</a>
+            </nav>
         </div>
 
         <div class="main-content">
-            <div class="profile-card">
-                <div class="profile-header">
-                    <div class="pfp-container">
-                        <img id="pfp-preview" src="https://via.placeholder.com/150" alt="Profile Picture">
-                        <label for="pfp-input" class="upload-btn">Change Photo</label>
-                        <input type="file" id="pfp-input" accept="image/*" style="display:none;">
-                    </div>
-                    <div class="user-info-basic">
-                        <h1 id="display-username">Username</h1>
-                        <p id="join-date">Member since: Loading...</p>
-                    </div>
+            <div class="profile-header-banner">
+                <div class="pfp-wrapper">
+                    <img id="pfp-preview" src="https://via.placeholder.com/150" alt="User PFP">
+                    <label for="pfp-input" class="pfp-edit-overlay">Edit</label>
+                    <input type="file" id="pfp-input" accept="image/*" style="display:none;">
                 </div>
-                
-                    <div class="input-group">
-                        <label>Bio</label>
-                        <textarea id="bio-input" placeholder="Tell us about yourself..."></textarea>
-                    </div>
+                <h1 id="display-username">Loading...</h1>
+            </div>
 
-                    <div class="stats-row">
-                        <div class="stat-box">
-                            <span class="stat-label">Status</span>
-                            <span class="stat-value" id="status-tag">Online</span>
-                        </div>
+            <div class="profile-settings-grid">
+                <div class="settings-card">
+                    <h3>About Me</h3>
+                    <textarea id="bio-input" placeholder="Write something about yourself..."></textarea>
+                    
+                    <div class="info-row">
+                        <span>Account Status:</span>
+                        <span id="account-status" style="color: #00c853;">Active</span>
                     </div>
-
-                    <button id="save-profile-btn">Save Changes</button>
+                    
+                    <button id="save-profile-btn" class="nx-btn">Save Profile</button>
                     <p id="save-status"></p>
+                </div>
+
+                <div class="settings-card">
+                    <h3>Account Info</h3>
+                    <div class="readonly-box">
+                        <label>Username</label>
+                        <p id="info-username">---</p>
+                    </div>
+                    <div class="readonly-box">
+                        <label>Joined Date</label>
+                        <p id="join-date">---</p>
+                    </div>
                 </div>
             </div>
         </div>
