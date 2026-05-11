@@ -15,6 +15,7 @@
             
             <div class="channel-list">
                 <div id="chan-general" class="channel active" onclick="switchTab('general')"># general</div>
+                <div id="chan-users" class="channel" onclick="switchTab('users')"># users</div>
                 <div id="chan-rules" class="channel" onclick="switchTab('rules')"># rules</div>
                 <div id="chan-dev" class="channel" onclick="switchTab('dev-logs')"># dev-logs</div>
                 <div id="admin-tab" class="channel" style="display:none; color: #ff4444; font-weight: bold;" onclick="switchTab('admin')"># admin</div>
@@ -27,11 +28,9 @@
         </div>
 
         <div class="main-chat">
-            <div id="ban-notice" style="display:none;">
-                <strong>NOTICE:</strong> <span id="notice-text"></span>
-            </div>
+            <div id="ban-notice"><strong>NOTICE:</strong> <span id="notice-text"></span></div>
             
-            <div id="chat-view" style="display: flex; flex-direction: column; height: 100%;">
+            <div id="chat-view">
                 <div id="chat-messages" class="messages-container"></div>
                 <form id="chat-form" class="input-area">
                     <input type="text" id="message-input" placeholder="Type a message..." autocomplete="off">
@@ -39,8 +38,15 @@
                 </form>
             </div>
 
+            <div id="users-view" style="display:none; padding: 40px; height: 100%; overflow-y: auto;">
+                <h1 style="color: #8b00ff; margin-bottom: 20px;">User Directory</h1>
+                <input type="text" id="directory-search" placeholder="Search for a user..." style="margin-bottom: 20px;">
+                <div id="user-list-display" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 15px;">
+                    </div>
+            </div>
+
             <div id="rules-view" class="rules-content">
-                <h1 style="color:#8b00ff">COMMUNITY RULES</h1>
+                <h1>COMMUNITY RULES</h1>
                 <ul>
                     <li>1. No handing out personal information.</li>
                     <li>2. No cussing.</li>
@@ -51,38 +57,35 @@
             </div>
 
             <div id="admin-panel-view">
-                <h1 style="margin-bottom:20px; color:#ff4444;">Admin Management System</h1>
+                <h1 style="margin-bottom:20px; color:#ff4444;">Admin Management</h1>
                 <div class="admin-grid">
-                    
                     <div class="admin-card">
                         <h3>Warnings</h3>
-                        <input type="text" id="warn-search" placeholder="Search user to warn...">
-                        <p style="font-size: 11px; color: #888; margin-bottom: 5px;">OR BULK WARN (comma separated):</p>
-                        <textarea id="bulk-warn" class="bulk-area" placeholder="user1, user2, user3"></textarea>
-                        <input type="text" id="warn-reason" placeholder="Reason for warning...">
+                        <div class="search-wrapper">
+                            <input type="text" id="warn-search" placeholder="Type @ to find user...">
+                        </div>
+                        <textarea id="bulk-warn" class="bulk-area" placeholder="user1, user2..."></textarea>
+                        <input type="text" id="warn-reason" placeholder="Reason...">
                         <button class="admin-btn btn-warn" onclick="adminExecute('warn')">Issue Warning</button>
                     </div>
 
                     <div class="admin-card">
-                        <h3>Bans & Restrictions</h3>
-                        <input type="text" id="ban-search" placeholder="Search user to ban/unban...">
-                        <p style="font-size: 11px; color: #888; margin-bottom: 5px;">OR BULK BAN (comma separated):</p>
-                        <textarea id="bulk-ban" class="bulk-area" placeholder="user1, user2, user3"></textarea>
-                        <input type="text" id="ban-reason" placeholder="Reason for ban...">
+                        <h3>Bans</h3>
+                        <div class="search-wrapper">
+                            <input type="text" id="ban-search" placeholder="Type @ to find user...">
+                        </div>
+                        <input type="text" id="ban-reason" placeholder="Reason...">
                         <select id="ban-category">
-                            <option value="Both">Both (Chat & Games)</option>
-                            <option value="Chat">Chat Only</option>
-                            <option value="Games">Games Only</option>
+                            <option value="Both">Both</option>
+                            <option value="Chat">Chat</option>
                         </select>
                         <button class="admin-btn btn-ban" onclick="adminExecute('ban')">Execute Ban</button>
-                        <button class="admin-btn btn-unban" style="margin-top:15px;" onclick="adminExecute('unban')">Unban User</button>
+                        <button class="admin-btn btn-unban" onclick="adminExecute('unban')">Unban User</button>
                     </div>
-
                 </div>
             </div>
         </div>
     </div>
-
     <script type="module" src="chat.js"></script>
 </body>
 </html>
