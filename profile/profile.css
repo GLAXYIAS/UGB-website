@@ -1,1 +1,174 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Segoe UI', sans-serif;
+}
 
+body {
+    background: #0a0a0a;
+    color: white;
+    height: 100vh;
+}
+
+.profile-container {
+    display: flex;
+    height: 100vh;
+}
+
+/* Sidebar Styling */
+.sidebar {
+    width: 260px;
+    background: #111;
+    border-right: 1px solid #222;
+    padding: 20px;
+}
+
+.sidebar-header h2 {
+    color: #8b00ff;
+    letter-spacing: 2px;
+    margin-bottom: 30px;
+}
+
+.nav-item {
+    color: #888;
+    text-decoration: none;
+    transition: 0.3s;
+}
+
+.nav-item:hover {
+    color: #8b00ff;
+}
+
+/* Main Content */
+.main-content {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: #0f0f0f;
+    overflow-y: auto;
+}
+
+.profile-card {
+    background: #161616;
+    width: 100%;
+    max-width: 600px;
+    border-radius: 15px;
+    border: 1px solid #222;
+    padding: 40px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+}
+
+.profile-header {
+    display: flex;
+    align-items: center;
+    gap: 30px;
+    margin-bottom: 40px;
+    border-bottom: 1px solid #222;
+    padding-bottom: 30px;
+}
+
+.pfp-container {
+    position: relative;
+    text-align: center;
+}
+
+#pfp-preview {
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 3px solid #8b00ff;
+}
+
+.upload-btn {
+    display: block;
+    margin-top: 10px;
+    font-size: 12px;
+    color: #8b00ff;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+.user-info-basic h1 {
+    font-size: 32px;
+    margin-bottom: 5px;
+}
+
+.user-info-basic p {
+    color: #666;
+    font-size: 14px;
+}
+
+/* Form Styling */
+.input-group {
+    margin-bottom: 20px;
+}
+
+.input-group label {
+    display: block;
+    color: #8b00ff;
+    font-size: 12px;
+    font-weight: bold;
+    margin-bottom: 8px;
+    text-transform: uppercase;
+}
+
+input[type="text"], textarea {
+    width: 100%;
+    background: #0a0a0a;
+    border: 1px solid #333;
+    padding: 12px;
+    border-radius: 8px;
+    color: white;
+    outline: none;
+}
+
+textarea {
+    height: 120px;
+    resize: none;
+}
+
+input:focus, textarea:focus {
+    border-color: #8b00ff;
+}
+
+.stats-row {
+    margin: 25px 0;
+}
+
+.stat-box {
+    background: #222;
+    padding: 15px;
+    border-radius: 8px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.stat-label { color: #888; font-size: 14px; }
+.stat-value { color: #00c853; font-weight: bold; }
+
+#save-profile-btn {
+    width: 100%;
+    background: #8b00ff;
+    color: white;
+    border: none;
+    padding: 15px;
+    border-radius: 8px;
+    font-weight: bold;
+    cursor: pointer;
+    font-size: 16px;
+    transition: 0.3s;
+}
+
+#save-profile-btn:hover {
+    background: #a230ff;
+}
+
+#save-status {
+    text-align: center;
+    margin-top: 15px;
+    font-size: 14px;
+}
