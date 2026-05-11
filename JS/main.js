@@ -2,6 +2,13 @@ import { applyCloak } from '../Cloaks/Cloaks.js';
 
 const _0xData = [
   {
+    id: "b_to",
+    title: atob("QnJvdGF0bw=="), 
+    url: "Games/brotato/index.html",
+    desc: "A top-down arena shooter roguelite where you play a potato wielding up to 6 weapons at a time.",
+    popular: true
+  },
+  {
     id: "s_lp",
     title: atob("U2xvcGU="), 
     url: "Games/slope/index.html",
@@ -27,13 +34,6 @@ const _0xData = [
     title: atob("UG9rZW1vbiBFbWVyYWxk"), 
     url: "Games/pokemon-emerald/index.html",
     desc: "The classic GBA adventure. Become the Hoenn Champion!",
-    popular: true
-  },
-  {
-    id: "b_to",
-    title: atob("QnJvdGF0bw=="), 
-    url: "Games/brotato/index.html",
-    desc: "A top-down arena shooter roguelite where you play a potato wielding up to 6 weapons at a time.",
     popular: true
   }
 ];
