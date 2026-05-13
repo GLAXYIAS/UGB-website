@@ -30,7 +30,6 @@ document.addEventListener('DOMContentLoaded', () => {
         };
     }
 
-    // Password Toggles
     const setupToggle = (inputId, toggleId) => {
         const input = document.getElementById(inputId);
         const toggle = document.getElementById(toggleId);
@@ -74,12 +73,25 @@ window.handleSignup = async () => {
         return;
     }
 
-    // Generate 12-digit code
+    // 1. Generate 12-digit code
     const verificationCode = Math.floor(100000000000 + Math.random() * 900000000000);
+    message.innerHTML = '<span style="color: #8b00ff;">Sending code to ' + email + '...</span>';
 
-    message.innerHTML = '<span style="color: #8b00ff;">Creating account...</span>';
+    // 2. SEND EMAIL VIA EMAILJS (Your Outlook Service)
+    try {
+        await emailjs.send("service_jh86mmf", "template_yhnzvos", {
+            to_email: email,
+            verification_code: verificationCode,
+            username: username
+        });
+        console.log("Email sent successfully with code:", verificationCode);
+    } catch (err) {
+        console.error("EmailJS Error:", err);
+        message.innerHTML = '<span class="error">Failed to send email. Check console.</span>';
+        return;
+    }
 
-    // 1. Create user in Supabase Auth
+    // 3. Register in Supabase
     const { data, error } = await _supabase.auth.signUp({
         email: email,
         password: password,
@@ -93,22 +105,19 @@ window.handleSignup = async () => {
         message.innerHTML = `<span class="error">${error.message}</span>`;
         grecaptcha.reset();
     } else {
-        // --- THIS IS WHERE YOU WILL ADD YOUR EMAIL SENDER NEXT ---
-        console.log("Verification Code for " + email + ": " + verificationCode);
-        
-        // 2. Prompt for the code
-        const userEnteredCode = prompt("Enter the 12-digit code sent to " + email);
+        // 4. Verification Prompt
+        const userEnteredCode = prompt("Check your inbox! Enter the 12-digit code sent to " + email);
 
         if (userEnteredCode == verificationCode) {
-            // 3. Save to user_roles so login works by username
+            // Save to database
             await _supabase.from('user_roles').insert([
                 { username: username, email: email, role_tag: 'user' }
             ]);
             
-            message.innerHTML = '<span class="success">Verified! Switch to Login.</span>';
+            message.innerHTML = '<span class="success">Verified! You can now login.</span>';
             grecaptcha.reset();
         } else {
-            message.innerHTML = '<span class="error">Invalid code. Signup aborted.</span>';
+            message.innerHTML = '<span class="error">Invalid code. Signup failed.</span>';
         }
     }
 };
@@ -123,9 +132,9 @@ window.handleLogin = async () => {
 
     let emailToAuth = identifier;
 
-    // If identifier doesn't look like an email, find the email in user_roles
+    // Look up email if they used a username
     if (!identifier.includes('@')) {
-        const { data: profile, error: searchError } = await _supabase
+        const { data: profile } = await _supabase
             .from('user_roles')
             .select('email')
             .eq('username', identifier)
@@ -139,7 +148,6 @@ window.handleLogin = async () => {
         }
     }
 
-    // Sign in using the discovered email
     const { data, error } = await _supabase.auth.signInWithPassword({
         email: emailToAuth,
         password: password
