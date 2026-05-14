@@ -145,11 +145,25 @@ document.addEventListener('DOMContentLoaded', () => {
             if (heroSection) heroSection.style.display = 'none';
             if (gameGrid) {
                 gameGrid.innerHTML = `
-                    <div class="game-card" onclick="openNullChat()" style="cursor:pointer; border: 1px solid #8b00ff; background: #0a0a0a;">
+                    <div class="game-card" onclick="openNullChat()" style="cursor:pointer; border: 1px solid #8b00ff; background: #0a0a0a; grid-column: span 1;">
                         <div class="game-info">
                             <h3>Null Chat</h3>
                             <p>Encrypted Comms (Sign-in Required)</p>
                         </div>
+                    </div>
+
+                    <div class="form-wrapper" style="grid-column: 1 / -1; margin-top: 30px;">
+                        <h2 class="form-title">🎮 Request a Game</h2>
+                        <p class="form-subtitle" style="text-align: center; color: #888; margin-bottom: 20px;">Suggest new content for Null_X</p>
+                        <iframe 
+                            src="https://docs.google.com/forms/d/e/1FAIpQLSdM5VOrjMSdmRv5udVq9PTP4olf6kBQtShX3ZT9-I45Uu0nfQ/viewform?embedded=true" 
+                            class="google-form-iframe"
+                            width="100%" 
+                            height="700" 
+                            frameborder="0"
+                            style="border-radius: 10px; background: #fff;">
+                            Loading…
+                        </iframe>
                     </div>
                 `;
                 gameGrid.style.display = 'grid';
