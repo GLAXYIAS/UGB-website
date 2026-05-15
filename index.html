@@ -136,7 +136,11 @@
       </div>
     </div>
   </div>
-
+  
+<div id="gameRunner" class="hidden" style="position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: #000; z-index: 99999;">
+    <span id="exitGame" style="position: absolute; top: 20px; right: 30px; color: #ff4d4d; font-size: 50px; font-weight: bold; cursor: pointer; z-index: 100000; text-shadow: 0 0 15px rgba(255, 77, 77, 0.6); transition: 0.3s;">&times;</span>
+    <iframe id="gameFrame" src="" style="width: 100%; height: 100%; border: none;"></iframe>
+</div>
   <script type="module" src="JS/main.js"></script>
 </body>
 </html>
