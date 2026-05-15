@@ -1,5 +1,9 @@
 import { applyCloak } from '../Cloaks/Cloaks.js';
 
+/**
+ * Null_X Database / Game Registry
+ * Note: Titles are Base64 encoded to avoid simple text filters.
+ */
 const _0xData = [
   {
     id: "b_to",
@@ -38,10 +42,17 @@ const _0xData = [
   }
 ];
 
+/**
+ * Helper: Filter data for popular/featured games
+ */
 function getMostPopular() {
     return _0xData.filter(g => g.popular);
 }
 
+/**
+ * Global Function: Opens encrypted chat in a new tab
+ * Cloaks the window title as "Grades" for stealth.
+ */
 window.openNullChat = function() {
     const user = localStorage.getItem('chatUser');
     if (!user) {
@@ -54,17 +65,25 @@ window.openNullChat = function() {
     }
 };
 
+/**
+ * Main Initialization Logic
+ */
 document.addEventListener('DOMContentLoaded', () => {
-    // --- Theme & Cloak Init ---
+    
+    // --- 1. Theme & Cloak Persistence ---
     const savedTheme = localStorage.getItem('selectedTheme');
     if (savedTheme) applyTheme(savedTheme);
 
     const savedCloak = localStorage.getItem('savedCloak');
     if (savedCloak && savedCloak !== "none") {
-        try { applyCloak(savedCloak); } catch (e) { console.error(e); }
+        try { 
+            applyCloak(savedCloak); 
+        } catch (e) { 
+            console.error("Cloak Error:", e); 
+        }
     }
 
-    // --- Auth UI Logic ---
+    // --- 2. Authentication UI Sync ---
     const user = localStorage.getItem('chatUser');
     const welcomeText = document.getElementById('welcome-text');
     const signInBtn = document.getElementById('signInBtn');
@@ -85,7 +104,7 @@ document.addEventListener('DOMContentLoaded', () => {
         };
     }
 
-    // --- DOM Elements ---
+    // --- 3. DOM Element Selection ---
     const settingsModal = document.getElementById('settingsModal');
     const settingsBtn = document.getElementById('settingsBtn');
     const closeSettings = document.getElementById('closeSettings');
@@ -97,11 +116,16 @@ document.addEventListener('DOMContentLoaded', () => {
     const gameGrid = document.getElementById('gameGrid');
     const stealthBtn = document.getElementById('stealthOpener');
     
+    // Panic Settings UI
     const panicShortcutInput = document.getElementById('panicShortcut');
     const panicLinkInput = document.getElementById('panicLink');
     const savePanicBtn = document.getElementById('savePanic');
 
-    // --- Functions ---
+    // --- 4. Core Functions ---
+
+    /**
+     * Updates visual CSS variables based on selected theme
+     */
     function applyTheme(theme) {
         const root = document.documentElement;
         if (theme === 'midnight') {
@@ -115,7 +139,10 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    // RESTORED: Old-school direct launch
+    /**
+     * Direct Launch Logic (Old-School Reliable)
+     * Redirects current window to the game URL
+     */
     function launchGame(gameId) {
         const game = _0xData.find(g => g.id === gameId);
         if (game) {
@@ -123,6 +150,9 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
+    /**
+     * Populates and displays the game library
+     */
     function showLibrary() {
         if (heroSection) heroSection.style.display = 'none';
         if (gameGrid) {
@@ -141,12 +171,20 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
+    /**
+     * Restores the home/hero view
+     */
     function showHome() {
         if (heroSection) heroSection.style.display = 'flex';
         if (gameGrid) gameGrid.style.display = 'none';
     }
 
-    // --- STEALTH MODE ---
+    // --- 5. Stealth & Panic Logic ---
+
+    /**
+     * Stealth Mode Launcher
+     * Opens site in about:blank and replaces original tab with Classroom
+     */
     if (stealthBtn) {
         stealthBtn.onclick = () => {
             const url = window.location.href;
@@ -160,11 +198,15 @@ document.addEventListener('DOMContentLoaded', () => {
             iframe.src = url;
             iframe.style = "position:fixed; top:0; left:0; width:100%; height:100%; border:none; margin:0; padding:0; overflow:hidden;";
             win.document.body.appendChild(iframe);
+            
+            // Redirect the "evidence" tab immediately
             window.location.replace("https://classroom.google.com");
         };
     }
 
-    // --- PANIC BUTTON SETUP ---
+    /**
+     * Panic Shortcut Recorder
+     */
     if (panicShortcutInput) {
         panicShortcutInput.value = localStorage.getItem('panicKey') || "";
         panicShortcutInput.onclick = () => {
@@ -179,20 +221,29 @@ document.addEventListener('DOMContentLoaded', () => {
         };
     }
 
+    /**
+     * Panic URL Saver (with Protocol Fix)
+     */
     if (savePanicBtn) {
         savePanicBtn.onclick = () => {
             let link = panicLinkInput.value || "https://classroom.google.com";
-            // Important fix: Force external link protocol
-            if (!link.startsWith('http')) link = 'https://' + link;
+            
+            // Critical Fix: Prevent the repo-path error by forcing https://
+            if (!link.startsWith('http')) {
+                link = 'https://' + link;
+            }
+            
             localStorage.setItem('panicUrl', link);
             alert("Panic settings saved!");
         };
     }
 
-    // --- EVENT LISTENERS ---
+    // --- 6. Event Handlers ---
+
     if (navGames) navGames.onclick = (e) => { e.preventDefault(); showLibrary(); };
     if (navHome) navHome.onclick = (e) => { e.preventDefault(); showHome(); };
 
+    // Communications / Chat Tab Logic
     if (navComms) {
         navComms.onclick = (e) => {
             e.preventDefault();
@@ -207,7 +258,9 @@ document.addEventListener('DOMContentLoaded', () => {
                     </div>
                     <div class="form-wrapper" style="grid-column: 1 / -1; margin-top: 30px;">
                         <h2 class="form-title">🎮 Request a Game</h2>
-                        <iframe src="https://docs.google.com/forms/d/e/1FAIpQLSdM5VOrjMSdmRv5udVq9PTP4olf6kBQtShX3ZT9-I45Uu0nfQ/viewform?embedded=true" class="google-form-iframe" width="100%" height="700" frameborder="0" style="border-radius: 10px; background: #fff;"></iframe>
+                        <iframe src="https://docs.google.com/forms/d/e/1FAIpQLSdM5VOrjMSdmRv5udVq9PTP4olf6kBQtShX3ZT9-I45Uu0nfQ/viewform?embedded=true" class="google-form-iframe" width="100%" height="700" frameborder="0" style="border-radius: 10px; background: #fff;">
+                        Loading…
+                        </iframe>
                     </div>
                 `;
                 gameGrid.style.display = 'grid';
@@ -215,9 +268,11 @@ document.addEventListener('DOMContentLoaded', () => {
         };
     }
 
+    // Settings Modal Toggles
     if (settingsBtn) settingsBtn.onclick = () => settingsModal.style.display = 'flex';
     if (closeSettings) closeSettings.onclick = () => settingsModal.style.display = 'none';
 
+    // Cloak Selection Listener
     if (cloakSelector) {
         if (savedCloak) cloakSelector.value = savedCloak;
         cloakSelector.onchange = (e) => {
@@ -232,21 +287,35 @@ document.addEventListener('DOMContentLoaded', () => {
         };
     }
 
+    // --- 7. Page Content Initialization ---
+
+    // Set Hero Section content based on featured game
     const popular = getMostPopular();
     if (popular.length > 0) {
-        document.getElementById('hero-title').textContent = popular[0].title;
-        document.getElementById('hero-desc').textContent = popular[0].desc;
-        document.getElementById('playFeatured').onclick = () => launchGame(popular[0].id);
+        const titleEl = document.getElementById('hero-title');
+        const descEl = document.getElementById('hero-desc');
+        const playBtn = document.getElementById('playFeatured');
+
+        if (titleEl) titleEl.textContent = popular[0].title;
+        if (descEl) descEl.textContent = popular[0].desc;
+        if (playBtn) playBtn.onclick = () => launchGame(popular[0].id);
     }
 
-    // --- GLOBAL PANIC LISTENER ---
-    window.onkeydown = (e) => {
+    /**
+     * GLOBAL PANIC KEY LISTENER
+     * Checks all keystrokes for the user-defined panic key
+     */
+    window.addEventListener('keydown', (e) => {
         const panicKey = localStorage.getItem('panicKey');
         if (panicKey && e.key === panicKey) {
             let url = localStorage.getItem('panicUrl') || "https://classroom.google.com";
-            // Re-enforce protocol check on keydown
-            if (!url.startsWith('http')) url = 'https://' + url;
+            
+            // Protocol safety check
+            if (!url.startsWith('http')) {
+                url = 'https://' + url;
+            }
+            
             window.location.href = url;
         }
-    };
+    });
 });
