@@ -699,4 +699,136 @@ nav {
 .text-accent { color: var(--accent); }
 .bg-dark { background: #0a0a0a; }
 
+/* -------------------------------------------------------------------------- */
+/* NEW FEATURES (NEWS SIDEBAR, STEALTH MODE, AND ANIMATIONS) */
+/* -------------------------------------------------------------------------- */
+
+/* Stealth Button Styling */
+.cloak-btn {
+  width: 100%;
+  padding: 16px 20px;
+  background: transparent;
+  border: 1px solid var(--accent);
+  color: #fff;
+  border-radius: 14px;
+  font-size: 16px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  margin-bottom: 10px;
+}
+
+.cloak-btn:hover {
+  background: var(--accent);
+  box-shadow: 0 0 20px rgba(139, 0, 255, 0.4);
+  transform: translateY(-2px);
+}
+
+/* News Sidebar Container */
+.news-sidebar {
+  margin-top: 30px;
+  padding-top: 25px;
+  border-top: 1px solid rgba(255, 255, 255, 0.05);
+  text-align: left;
+}
+
+.news-title {
+  font-size: 0.9rem;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  color: #71717a;
+  margin-bottom: 20px;
+  padding-left: 5px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.news-title::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.news-feed {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+/* Individual News Card */
+.news-card {
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  padding: 18px;
+  border-radius: 18px;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+  overflow: hidden;
+}
+
+.news-card:hover {
+  border-color: var(--accent);
+  background: rgba(139, 0, 255, 0.05);
+  transform: translateX(5px);
+}
+
+.news-tag {
+  font-size: 10px;
+  background: var(--accent);
+  color: white;
+  padding: 3px 10px;
+  border-radius: 6px;
+  font-weight: 800;
+  text-transform: uppercase;
+  display: inline-block;
+  margin-bottom: 10px;
+  letter-spacing: 1px;
+}
+
+.news-card p {
+  font-size: 13.5px;
+  margin-bottom: 12px;
+  color: #e4e4e7;
+  line-height: 1.5;
+}
+
+.news-date {
+  font-size: 11px;
+  color: #52525b;
+  font-weight: 600;
+}
+
+/* System Pulse Animation for News Title */
+.news-title::before {
+  content: '';
+  width: 8px;
+  height: 8px;
+  background: #10b981;
+  border-radius: 50%;
+  box-shadow: 0 0 10px #10b981;
+  animation: pulseNews 2s infinite;
+}
+
+@keyframes pulseNews {
+  0% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.5; transform: scale(1.2); }
+  100% { opacity: 1; transform: scale(1); }
+}
+
+/* Generic Fade-In Animation for New Elements */
+.news-card, .cloak-btn {
+  animation: fadeInUpSmall 0.5s ease-out forwards;
+}
+
+@keyframes fadeInUpSmall {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
 /* End of Master CSS */
