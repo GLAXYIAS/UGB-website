@@ -97,7 +97,6 @@ document.addEventListener('DOMContentLoaded', () => {
     const gameGrid = document.getElementById('gameGrid');
     const stealthBtn = document.getElementById('stealthOpener');
     
-    // Panic Button Elements
     const panicShortcutInput = document.getElementById('panicShortcut');
     const panicLinkInput = document.getElementById('panicLink');
     const savePanicBtn = document.getElementById('savePanic');
@@ -116,23 +115,37 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    // Updated launchGame to use Iframe Overlay with Red X
-    function launchGame(gameId) {
+    // NEW: BLOB LAUNCHER with FALLBACK
+    async function launchGame(gameId) {
         const game = _0xData.find(g => g.id === gameId);
         const runner = document.getElementById('gameRunner');
         const frame = document.getElementById('gameFrame');
         const exitBtn = document.getElementById('exitGame');
 
         if (game && runner && frame) {
-            frame.src = game.url;
-            runner.classList.remove('hidden');
-            document.body.style.overflow = 'hidden';
-            
-            exitBtn.onclick = () => {
-                frame.src = "";
-                runner.classList.add('hidden');
-                document.body.style.overflow = 'auto';
-            };
+            try {
+                // Fetch the game file to convert to Blob
+                const response = await fetch(game.url);
+                if (!response.ok) throw new Error('Blob Fetch Failed');
+                
+                const text = await response.text();
+                const blob = new Blob([text], { type: 'text/html' });
+                const blobUrl = URL.createObjectURL(blob);
+                
+                frame.src = blobUrl;
+                runner.classList.remove('hidden');
+                document.body.style.overflow = 'hidden';
+                
+                exitBtn.onclick = () => {
+                    frame.src = "";
+                    URL.revokeObjectURL(blobUrl); // Cleanup
+                    runner.classList.add('hidden');
+                    document.body.style.overflow = 'auto';
+                };
+            } catch (e) {
+                console.warn("Blob failed, falling back to direct redirect.", e);
+                window.location.href = game.url;
+            }
         }
     }
 
@@ -159,7 +172,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if (gameGrid) gameGrid.style.display = 'none';
     }
 
-    // --- STEALTH MODE (about:blank) ---
+    // --- STEALTH MODE ---
     if (stealthBtn) {
         stealthBtn.onclick = () => {
             const url = window.location.href;
@@ -195,7 +208,6 @@ document.addEventListener('DOMContentLoaded', () => {
     if (savePanicBtn) {
         savePanicBtn.onclick = () => {
             let link = panicLinkInput.value || "https://classroom.google.com";
-            // Ensure protocol is present
             if (!link.startsWith('http')) link = 'https://' + link;
             localStorage.setItem('panicUrl', link);
             alert("Panic settings saved!");
@@ -245,7 +257,6 @@ document.addEventListener('DOMContentLoaded', () => {
         };
     }
 
-    // --- Hero Section Init ---
     const popular = getMostPopular();
     if (popular.length > 0) {
         document.getElementById('hero-title').textContent = popular[0].title;
