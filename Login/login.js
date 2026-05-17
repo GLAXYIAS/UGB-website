@@ -7,11 +7,6 @@ if (window.supabase) {
     _supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 }
 
-// SUCCESSFUL CONNECT: Initializing EmailJS with your verified Public Key
-if (window.emailjs) {
-    window.emailjs.init("21Uh3wToxS52z7NUN");
-}
-
 // --- TAB SWITCHING & UI ---
 document.addEventListener('DOMContentLoaded', () => {
     const signupTab = document.getElementById('signupTab');
@@ -65,7 +60,7 @@ window.checkUsername = async () => {
     feedback.innerHTML = (data && data.length > 0) ? '<span class="error">Taken</span>' : '<span class="success">Available</span>';
 };
 
-// --- SIGN UP LOGIC ---
+// --- SIGN UP LOGIC (DIRECT & INSTANT) ---
 window.handleSignup = async () => {
     const email = document.getElementById('signupEmail').value.trim();
     const username = document.getElementById('signupUsername').value.trim();
@@ -83,24 +78,9 @@ window.handleSignup = async () => {
         return;
     }
 
-    const verificationCode = Math.floor(100000000000 + Math.random() * 900000000000);
-    message.innerHTML = '<span style="color: #8b00ff;">Sending code to ' + email + '...</span>';
+    message.innerHTML = '<span style="color: #8b00ff;">Creating account...</span>';
 
-    let emailSent = false;
-
-    try {
-        await emailjs.send("service_jh86mmf", "template_yhnzvos", {
-            to_email: email,
-            verification_code: verificationCode,
-            username: username
-        });
-        console.log("Email sent successfully with code:", verificationCode);
-        emailSent = true;
-    } catch (err) {
-        console.error("EmailJS Error:", err);
-        console.warn("Using system recovery fallback code display.");
-    }
-
+    // 1. Create the user inside Supabase Auth
     const { data, error } = await _supabase.auth.signUp({
         email: email,
         password: password,
@@ -116,16 +96,8 @@ window.handleSignup = async () => {
         return;
     }
 
-    let userEnteredCode;
-    if (emailSent) {
-        userEnteredCode = prompt("Check your inbox! Enter the 12-digit code sent to " + email);
-    } else {
-        userEnteredCode = prompt("[FALLBACK] The email service failed to connect. Your confirmation code is:\n\n" + verificationCode + "\n\nCopy and paste it below:");
-    }
-
-    if (userEnteredCode == verificationCode) {
-        message.innerHTML = '<span style="color: #8b00ff;">Finalizing registration...</span>';
-        
+    // 2. Link the new user ID directly to the user_roles table
+    if (data.user) {
         try {
             const { error: insertError } = await _supabase.from('user_roles').insert([
                 { id: data.user.id, username: username, email: email, role_tag: 'user' }
@@ -137,20 +109,23 @@ window.handleSignup = async () => {
                 return;
             }
 
-            message.innerHTML = '<span class="success">Verified! You can now login.</span>';
+            // Success! Clear the inputs and send them to the login screen
+            message.innerHTML = '<span class="success">Account created! Switching to Login...</span>';
             grecaptcha.reset();
             
             setTimeout(() => {
                 const loginTab = document.getElementById('loginTab');
                 if (loginTab) loginTab.click();
+
+                document.getElementById('signupEmail').value = '';
+                document.getElementById('signupUsername').value = '';
+                document.getElementById('signupPassword').value = '';
             }, 1500);
 
         } catch (dbErr) {
-            console.error("Database Error:", dbErr);
-            message.innerHTML = '<span class="error">Failed to save profile record.</span>';
+            console.error("Database Crash:", dbErr);
+            message.innerHTML = '<span class="error">Failed to save profile records.</span>';
         }
-    } else {
-        message.innerHTML = '<span class="error">Invalid code. Signup failed.</span>';
     }
 };
 
@@ -170,6 +145,7 @@ window.handleLogin = async () => {
     try {
         let emailToAuth = identifier;
 
+        // Look up email via user_roles table if a username was used
         if (!identifier.includes('@')) {
             const { data: profile, error: profileError } = await _supabase
                 .from('user_roles')
@@ -184,6 +160,7 @@ window.handleLogin = async () => {
             emailToAuth = profile.email;
         }
 
+        // Run the authentication check
         const { data, error } = await _supabase.auth.signInWithPassword({
             email: emailToAuth,
             password: password
@@ -201,7 +178,7 @@ window.handleLogin = async () => {
             }, 1000);
         }
     } catch (criticalErr) {
-        console.error("Critical Failure:", criticalErr);
-        message.innerHTML = '<span class="error">Unexpected server error.</span>';
+        console.error("Authentication Process Exception:", criticalErr);
+        message.innerHTML = '<span class="error">Unexpected server error. Check console.</span>';
     }
 };
