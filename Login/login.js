@@ -60,7 +60,7 @@ window.checkUsername = async () => {
     feedback.innerHTML = (data && data.length > 0) ? '<span class="error">Taken</span>' : '<span class="success">Available</span>';
 };
 
-// --- SIGN UP LOGIC (DIRECT & INSTANT) ---
+// --- SIGN UP LOGIC (WITH hCAPTCHA & EMAIL VERIFICATION) ---
 window.handleSignup = async () => {
     const email = document.getElementById('signupEmail').value.trim();
     const username = document.getElementById('signupUsername').value.trim();
@@ -72,15 +72,15 @@ window.handleSignup = async () => {
         return;
     }
 
-    const captchaToken = grecaptcha.getResponse();
+    // FIXED: Now accurately targeting the global hcaptcha instance instead of older grecaptcha
+    const captchaToken = hcaptcha.getResponse();
     if (!captchaToken) {
-        message.innerHTML = '<span class="error">Complete the reCAPTCHA</span>';
+        message.innerHTML = '<span class="error">Please complete the captcha checkbox</span>';
         return;
     }
 
-    message.innerHTML = '<span style="color: #8b00ff;">Creating account...</span>';
+    message.innerHTML = '<span style="color: #8b00ff;">Creating account and sending verification link...</span>';
 
-    // 1. Create the user inside Supabase Auth
     const { data, error } = await _supabase.auth.signUp({
         email: email,
         password: password,
@@ -92,11 +92,10 @@ window.handleSignup = async () => {
 
     if (error) {
         message.innerHTML = `<span class="error">${error.message}</span>`;
-        grecaptcha.reset();
+        hcaptcha.reset();
         return;
     }
 
-    // 2. Link the new user ID directly to the user_roles table
     if (data.user) {
         try {
             const { error: insertError } = await _supabase.from('user_roles').insert([
@@ -109,18 +108,12 @@ window.handleSignup = async () => {
                 return;
             }
 
-            // Success! Clear the inputs and send them to the login screen
-            message.innerHTML = '<span class="success">Account created! Switching to Login...</span>';
-            grecaptcha.reset();
+            message.innerHTML = '<span class="success">Account created! Check your email inbox to verify your account before logging in.</span>';
+            hcaptcha.reset();
             
-            setTimeout(() => {
-                const loginTab = document.getElementById('loginTab');
-                if (loginTab) loginTab.click();
-
-                document.getElementById('signupEmail').value = '';
-                document.getElementById('signupUsername').value = '';
-                document.getElementById('signupPassword').value = '';
-            }, 1500);
+            document.getElementById('signupEmail').value = '';
+            document.getElementById('signupUsername').value = '';
+            document.getElementById('signupPassword').value = '';
 
         } catch (dbErr) {
             console.error("Database Crash:", dbErr);
@@ -145,7 +138,6 @@ window.handleLogin = async () => {
     try {
         let emailToAuth = identifier;
 
-        // Look up email via user_roles table if a username was used
         if (!identifier.includes('@')) {
             const { data: profile, error: profileError } = await _supabase
                 .from('user_roles')
@@ -160,7 +152,6 @@ window.handleLogin = async () => {
             emailToAuth = profile.email;
         }
 
-        // Run the authentication check
         const { data, error } = await _supabase.auth.signInWithPassword({
             email: emailToAuth,
             password: password
