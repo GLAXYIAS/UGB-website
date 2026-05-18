@@ -7,11 +7,66 @@ let lastMessageTime = 0;
 
 document.addEventListener('DOMContentLoaded', async () => {
     const user = localStorage.getItem('chatUser');
+    
+    // 1. If no local storage exists, boot them out immediately
     if (!user) {
         window.location.href = "../Login/login.html";
         return;
     }
 
+    // 2. HARD SECURITY KILL-SWITCH: Verify the user actually exists in user_roles
+    try {
+        const verifyRes = await fetch(`${SUPABASE_URL}/rest/v1/user_roles?username=eq.${encodeURIComponent(user)}&select=username`, {
+            headers: { 'apikey': SUPABASE_KEY, 'Authorization': `Bearer ${SUPABASE_KEY}` }
+        });
+        const verifyData = await verifyRes.json();
+
+        // If backend database returns nothing, this user does not exist! Evict them.
+        if (!verifyData || verifyData.length === 0) {
+            console.warn("Ghost session detected. Clearing storage and executing lockout.");
+            localStorage.removeItem('chatUser');
+            localStorage.clear();
+            window.location.href = "../Login/login.html";
+            return;
+        }
+    } catch (authError) {
+        console.error("Security handshake failed:", authError);
+    }
+
+    // 3. BAN CHECK: Make sure this user isn't actively flagged as banned in the database
+    try {
+        const banRes = await fetch(`${SUPABASE_URL}/rest/v1/user_roles?username=eq.${encodeURIComponent(user)}&select=is_banned,temp_ban_until`, {
+            headers: { 'apikey': SUPABASE_KEY, 'Authorization': `Bearer ${SUPABASE_KEY}` }
+        });
+        const banData = await banRes.json();
+        
+        if (banData && banData[0]) {
+            const profile = banData[0];
+            
+            // Handle Permanent Ban Check
+            if (profile.is_banned === true) {
+                alert("This account has been permanently banned from the server.");
+                localStorage.removeItem('chatUser');
+                window.location.href = "../Login/login.html";
+                return;
+            }
+            
+            // Handle Temporary Ban Check
+            if (profile.temp_ban_until) {
+                const expiryTime = new Date(profile.temp_ban_until).getTime();
+                if (expiryTime > Date.now()) {
+                    alert(`You are temporarily banned until: ${new Date(profile.temp_ban_until).toLocaleString()}`);
+                    localStorage.removeItem('chatUser');
+                    window.location.href = "../Login/login.html";
+                    return;
+                }
+            }
+        }
+    } catch (banCheckErr) {
+        console.error("Ban check failed:", banCheckErr);
+    }
+
+    // --- CONTINUATION OF ORIGINAL ENGINE FLOW ---
     const lowerUser = user.toLowerCase();
     document.getElementById('username-display').textContent = user;
     
@@ -23,18 +78,15 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     const msgContainer = document.getElementById('chat-messages');
 
-    // --- TAB NAVIGATION (FIXED FOR ADMIN PANEL) ---
+    // --- TAB NAVIGATION ---
     window.switchTab = (target) => {
-        // Hide all views first
         ['chat-view', 'rules-view', 'admin-panel-view', 'users-view'].forEach(v => {
             const el = document.getElementById(v);
             if (el) el.style.display = 'none';
         });
         
-        // Remove active class from all sidebar items
         document.querySelectorAll('.channel').forEach(c => c.classList.remove('active'));
         
-        // Logic to route the tab click to the correct View ID
         if (target === 'general' || target === 'dev-logs') {
             document.getElementById('chat-view').style.display = 'flex';
             const tabId = target === 'general' ? 'chan-general' : 'chan-dev';
@@ -118,7 +170,7 @@ document.addEventListener('DOMContentLoaded', async () => {
                         ${tag}<strong>${msg.username}</strong> <span style="font-size:10px; opacity:0.5; margin-left:5px;">${time}</span>
                     </div>
                     <div style="${isDel ? 'font-style:italic; opacity:0.5;' : ''}">${msg.content}</div>
-                    ${(lowerUser === ADMIN_NAME && !isDel) ? `<button style="background:none; color:red; font-size:10px; padding:0; margin-top:5px; cursor:pointer;" onclick="deleteMsg('${msg.id}')">Delete</button>` : ""}
+                     ${(lowerUser === ADMIN_NAME && !isDel) ? `<button style="background:none; color:red; font-size:10px; padding:0; margin-top:5px; cursor:pointer;" onclick="deleteMsg('${msg.id}')">Delete</button>` : ""}
                 `;
                 msgContainer.appendChild(div);
             });
@@ -147,7 +199,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         fetchMessages();
     };
 
-    // --- ADMIN ACTIONS (EXPORTED TO WINDOW FOR HTML BUTTONS) ---
+    // --- ADMIN ACTIONS ---
     window.adminExecute = async (action) => {
         let target = document.getElementById(action === 'warn' ? 'warn-search' : 'ban-search').value.trim();
         const reason = document.getElementById(action === 'warn' ? 'warn-reason' : 'ban-reason').value.trim();
