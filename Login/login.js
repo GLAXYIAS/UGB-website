@@ -60,7 +60,7 @@ window.checkUsername = async () => {
     feedback.innerHTML = (data && data.length > 0) ? '<span class="error">Taken</span>' : '<span class="success">Available</span>';
 };
 
-// --- SIGN UP LOGIC (SIMPLE: NO CAPTCHA & INSTANT LOGIN) ---
+// --- SIGN UP LOGIC (BOT CHECK FREE & ALIGNED WITH DB COLUMNS) ---
 window.handleSignup = async () => {
     const email = document.getElementById('signupEmail').value.trim();
     const username = document.getElementById('signupUsername').value.trim();
@@ -74,7 +74,7 @@ window.handleSignup = async () => {
 
     message.innerHTML = '<span style="color: #8b00ff;">Creating account...</span>';
 
-    // Captcha option completely removed here
+    // 1. Submit credentials directly to Supabase Auth without Captcha options
     const { data, error } = await _supabase.auth.signUp({
         email: email,
         password: password,
@@ -90,9 +90,18 @@ window.handleSignup = async () => {
 
     if (data.user) {
         try {
-            // Inserts into your correct 'user_roles' table
+            // 2. Insert row matching your exact user_roles table columns from the dashboard database
             const { error: insertError } = await _supabase.from('user_roles').insert([
-                { id: data.user.id, username: username, email: email, role_tag: 'user' }
+                { 
+                    id: data.user.id, 
+                    username: username, 
+                    email: email, 
+                    role_tag: 'user',
+                    is_banned: false, 
+                    bio: null,
+                    pfp_url: null,
+                    temp_ban_until: null
+                }
             ]);
 
             if (insertError) {
@@ -101,17 +110,14 @@ window.handleSignup = async () => {
                 return;
             }
 
-            // Updated confirmation message: Notice of instant access instead of email verification check
+            // Success state - direct sign-in routing configuration
             message.innerHTML = '<span class="success">Account created! Logging you in seamlessly...</span>';
-            
-            // Set user into localStorage right away
             localStorage.setItem('chatUser', username);
 
             document.getElementById('signupEmail').value = '';
             document.getElementById('signupUsername').value = '';
             document.getElementById('signupPassword').value = '';
 
-            // Automatically route inside your app after 1.5 seconds
             setTimeout(() => {
                 window.location.href = "../index.html";
             }, 1500);
