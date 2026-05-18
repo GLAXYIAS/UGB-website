@@ -60,7 +60,7 @@ window.checkUsername = async () => {
     feedback.innerHTML = (data && data.length > 0) ? '<span class="error">Taken</span>' : '<span class="success">Available</span>';
 };
 
-// --- SIGN UP LOGIC (WITH hCAPTCHA & EMAIL VERIFICATION) ---
+// --- SIGN UP LOGIC (SIMPLE: NO CAPTCHA & INSTANT LOGIN) ---
 window.handleSignup = async () => {
     const email = document.getElementById('signupEmail').value.trim();
     const username = document.getElementById('signupUsername').value.trim();
@@ -72,32 +72,25 @@ window.handleSignup = async () => {
         return;
     }
 
-    // FIXED: Now accurately targeting the global hcaptcha instance instead of older grecaptcha
-    const captchaToken = hcaptcha.getResponse();
-    if (!captchaToken) {
-        message.innerHTML = '<span class="error">Please complete the captcha checkbox</span>';
-        return;
-    }
+    message.innerHTML = '<span style="color: #8b00ff;">Creating account...</span>';
 
-    message.innerHTML = '<span style="color: #8b00ff;">Creating account and sending verification link...</span>';
-
+    // Captcha option completely removed here
     const { data, error } = await _supabase.auth.signUp({
         email: email,
         password: password,
         options: {
-            captchaToken: captchaToken,
             data: { display_name: username }
         }
     });
 
     if (error) {
         message.innerHTML = `<span class="error">${error.message}</span>`;
-        hcaptcha.reset();
         return;
     }
 
     if (data.user) {
         try {
+            // Inserts into your correct 'user_roles' table
             const { error: insertError } = await _supabase.from('user_roles').insert([
                 { id: data.user.id, username: username, email: email, role_tag: 'user' }
             ]);
@@ -108,12 +101,20 @@ window.handleSignup = async () => {
                 return;
             }
 
-            message.innerHTML = '<span class="success">Account created! Check your email inbox to verify your account before logging in.</span>';
-            hcaptcha.reset();
+            // Updated confirmation message: Notice of instant access instead of email verification check
+            message.innerHTML = '<span class="success">Account created! Logging you in seamlessly...</span>';
             
+            // Set user into localStorage right away
+            localStorage.setItem('chatUser', username);
+
             document.getElementById('signupEmail').value = '';
             document.getElementById('signupUsername').value = '';
             document.getElementById('signupPassword').value = '';
+
+            // Automatically route inside your app after 1.5 seconds
+            setTimeout(() => {
+                window.location.href = "../index.html";
+            }, 1500);
 
         } catch (dbErr) {
             console.error("Database Crash:", dbErr);
