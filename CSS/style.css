@@ -734,6 +734,11 @@ nav {
   padding-top: 25px;
   border-top: 1px solid rgba(255, 255, 255, 0.05);
   text-align: left;
+  
+  /* FIXED VIEWPORT LAYER CONSTRAINTS */
+  display: flex;
+  flex-direction: column;
+  max-height: calc(100vh - 240px); 
 }
 
 .news-title {
@@ -755,10 +760,36 @@ nav {
   background: rgba(255, 255, 255, 0.05);
 }
 
+/* News Feed Container - ENABLED INTERNAL VERTICAL SCROLLBAR ONLY */
 .news-feed {
   display: flex;
   flex-direction: column;
   gap: 15px;
+  
+  /* FIXED ISOLATED SCROLL PROPERTIES */
+  overflow-y: auto;
+  overflow-x: hidden;
+  padding-right: 5px;
+  scroll-behavior: smooth;
+}
+
+/* Custom Scrollbar Interface For The News Area */
+.news-feed::-webkit-scrollbar {
+  width: 6px;
+}
+
+.news-feed::-webkit-scrollbar-track {
+  background: rgba(0, 0, 0, 0.1);
+  border-radius: 4px;
+}
+
+.news-feed::-webkit-scrollbar-thumb {
+  background: var(--accent);
+  border-radius: 4px;
+}
+
+.news-feed::-webkit-scrollbar-thumb:hover {
+  background: #c084fc;
 }
 
 /* Individual News Card */
@@ -770,6 +801,7 @@ nav {
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   position: relative;
   overflow: hidden;
+  flex-shrink: 0; /* Prevents card templates from squishing under max-height restrictions */
 }
 
 .news-card:hover {
