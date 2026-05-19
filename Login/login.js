@@ -60,37 +60,96 @@ window.checkUsername = async () => {
     feedback.innerHTML = (data && data.length > 0) ? '<span class="error">Taken</span>' : '<span class="success">Available</span>';
 };
 
-// --- SIGN UP LOGIC (BOT CHECK FREE & ALIGNED WITH DB COLUMNS) ---
+// --- SIGN UP LOGIC (WITH STRICT CUSTOM VALIDATIONS) ---
 window.handleSignup = async () => {
     const email = document.getElementById('signupEmail').value.trim();
     const username = document.getElementById('signupUsername').value.trim();
     const password = document.getElementById('signupPassword').value;
     const message = document.getElementById('signupMessage');
 
+    // 1. Check for blank fields
     if (!email || !username || !password) {
         message.innerHTML = '<span class="error">Please fill in all fields.</span>';
         return;
     }
 
-    message.innerHTML = '<span style="color: #8b00ff;">Creating account...</span>';
-
-    // 1. Submit credentials directly to Supabase Auth without Captcha options
-    const { data, error } = await _supabase.auth.signUp({
-        email: email,
-        password: password,
-        options: {
-            data: { display_name: username }
-        }
-    });
-
-    if (error) {
-        message.innerHTML = `<span class="error">${error.message}</span>`;
+    // 2. PASSWORD VALIDATION: More than 5 characters and shorter than 35
+    if (password.length <= 5 || password.length >= 35) {
+        message.innerHTML = '<span class="error">Password must be between 6 and 34 characters.</span>';
         return;
     }
 
-    if (data.user) {
-        try {
-            // 2. Insert row matching your exact user_roles table columns from the dashboard database
+    // 3. MAJOR EMAIL DOMAIN FILTER (Whitelist)
+    const emailParts = email.split('@');
+    if (emailParts.length !== 2) {
+        message.innerHTML = '<span class="error">Invalid email format.</span>';
+        return;
+    }
+    
+    const domain = emailParts[1].toLowerCase();
+    const allowedDomains = [
+        'gmail.com', 
+        'outlook.com', 
+        'hotmail.com', 
+        'live.com', 
+        'msn.com',
+        'yahoo.com', 
+        'icloud.com', 
+        'proton.me', 
+        'protonmail.com', 
+        'zoho.com', 
+        'aol.com'
+    ];
+
+    if (!allowedDomains.includes(domain)) {
+        message.innerHTML = '<span class="error">Please use a valid primary email provider (Gmail, Outlook, Proton, etc.).</span>';
+        return;
+    }
+
+    message.innerHTML = '<span style="color: #8b00ff;">Verifying credentials...</span>';
+
+    try {
+        // 4. DUPLICATE USERNAME CHECK
+        const { data: existingUser, error: userCheckError } = await _supabase
+            .from('user_roles')
+            .select('username')
+            .eq('username', username);
+
+        if (userCheckError) throw userCheckError;
+        if (existingUser && existingUser.length > 0) {
+            message.innerHTML = '<span class="error">Username is already taken.</span>';
+            return;
+        }
+
+        // 5. DUPLICATE EMAIL CHECK
+        const { data: existingEmail, error: emailCheckError } = await _supabase
+            .from('user_roles')
+            .select('email')
+            .eq('email', email)
+            .not('email', 'is', null);
+
+        if (emailCheckError) throw emailCheckError;
+        if (existingEmail && existingEmail.length > 0) {
+            message.innerHTML = '<span class="error">This email is already registered.</span>';
+            return;
+        }
+
+        // 6. SUBMIT TO SUPABASE AUTH
+        const { data, error: authError } = await _supabase.auth.signUp({
+            email: email,
+            password: password,
+            options: {
+                data: { display_name: username }
+            }
+        });
+
+        if (authError) {
+            message.innerHTML = `<span class="error">${authError.message}</span>`;
+            return;
+        }
+
+        if (data.user) {
+            // 7. INSERT PROFILE INTO USER_ROLES
             const { error: insertError } = await _supabase.from('user_roles').insert([
                 { 
                     id: data.user.id, 
@@ -106,12 +165,12 @@ window.handleSignup = async () => {
 
             if (insertError) {
                 console.error("Database Insert Error:", insertError);
-                message.innerHTML = `<span class="error">Profile link failed: ${insertError.message}</span>`;
+                message.innerHTML = `<span class="error">Profile save failed: ${insertError.message}</span>`;
                 return;
             }
 
-            // Success state - direct sign-in routing configuration
-            message.innerHTML = '<span class="success">Account created! Logging you in seamlessly...</span>';
+            // Success state and login initialization
+            message.innerHTML = '<span class="success">Account created! Logging you in...</span>';
             localStorage.setItem('chatUser', username);
 
             document.getElementById('signupEmail').value = '';
@@ -121,11 +180,11 @@ window.handleSignup = async () => {
             setTimeout(() => {
                 window.location.href = "../index.html";
             }, 1500);
-
-        } catch (dbErr) {
-            console.error("Database Crash:", dbErr);
-            message.innerHTML = '<span class="error">Failed to save profile records.</span>';
         }
+
+    } catch (err) {
+        console.error("Signup validation crash:", err);
+        message.innerHTML = '<span class="error">Security processing error. Check console.</span>';
     }
 };
 
