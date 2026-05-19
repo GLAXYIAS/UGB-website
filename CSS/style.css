@@ -863,4 +863,65 @@ nav {
   to { opacity: 1; transform: translateY(0); }
 }
 
+/* -------------------------------------------------------------------------- */
+/* UPDATED: FULLSCREEN CLINICAL WHITE ACADEMIC CLOAK OVERLAY                  */
+/* -------------------------------------------------------------------------- */
+#educational-cloak {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: #ffffff !important;   /* Solid medical crisp white */
+  background: #ffffff !important;         /* Lock out backdrop variables */
+  z-index: 2147483647 !important;         /* Absolute top window priority */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-family: 'Times New Roman', Times, serif; /* High educational credibility */
+  padding: 40px;
+  box-sizing: border-box;
+  transition: opacity 0.5s ease, visibility 0.5s ease;
+  overflow: hidden;
+}
+
+.educational-content {
+  max-width: 650px;
+  text-align: left;
+  line-height: 1.6;
+  background: transparent !important;
+}
+
+/* Crisp high-contrast academic typography configuration */
+.educational-content h1 {
+  font-size: 1.9rem;
+  margin: 0 0 12px 0;
+  color: #000000 !important;              /* Solid plain black */
+  font-weight: bold;
+}
+
+.educational-content p {
+  font-size: 1.05rem;
+  margin: 0 0 16px 0;
+  color: #000000 !important;              /* Solid plain black */
+}
+
+.educational-content strong {
+  color: #000000 !important;
+  font-weight: bold;
+}
+
+.timer-subtext {
+  font-style: italic;
+  font-size: 0.95rem;
+  color: #444444 !important;              /* Deep slate gray for subtext metrics */
+  margin-top: 30px;
+  font-family: 'Times New Roman', Times, serif;
+}
+
+.timer-subtext span {
+  color: #000000 !important;
+  font-weight: bold;
+}
+
 /* End of Master CSS */
