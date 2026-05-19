@@ -20,7 +20,7 @@ const _0xData = [
   },
   {
     id: "d_md",
-    title: atob("RHJpdmUgTWFk"), 
+    title: atob("RHJpdmUwYWQ="), 
     url: "Games/drivemad/index.html",
     desc: "Challenging physics-based driving. Don't flip your truck!",
     popular: true
@@ -68,6 +68,51 @@ window.openNullChat = function() {
  * Main Initialization Logic
  */
 document.addEventListener('DOMContentLoaded', () => {
+    
+    // --- 0. Educational Cloak Countdown Engine ---
+    const cloakElement = document.getElementById('educational-cloak');
+    const cloakTimerText = document.getElementById('cloak-timer');
+    const cloakCheckbox = document.getElementById('toggle-study-cloak');
+    
+    // Read preference flag from master memory storage
+    const isCloakDisabled = localStorage.getItem('disableStudyCloak') === 'true';
+    
+    // Configure settings checkbox component checkmark state to match
+    if (cloakCheckbox) {
+        cloakCheckbox.checked = isCloakDisabled;
+        
+        // Save changes whenever user manually alters input box value
+        cloakCheckbox.addEventListener('change', (e) => {
+            localStorage.setItem('disableStudyCloak', e.target.checked ? 'true' : 'false');
+        });
+    }
+
+    if (isCloakDisabled) {
+        // Strip the element layout node completely if deactivated by preference settings
+        if (cloakElement) cloakElement.style.display = 'none';
+    } else {
+        // Run countdown sequence routine if overlay engine is active
+        let clockSecondsLeft = 10;
+        
+        const countdownLoop = setInterval(() => {
+            clockSecondsLeft--;
+            if (cloakTimerText) cloakTimerText.textContent = clockSecondsLeft;
+            
+            if (clockSecondsLeft <= 0) {
+                clearInterval(countdownLoop);
+                
+                if (cloakElement) {
+                    cloakElement.style.opacity = '0';
+                    cloakElement.style.visibility = 'hidden';
+                    
+                    // Detach from interactive visibility nodes upon termination complete
+                    setTimeout(() => {
+                        cloakElement.style.display = 'none';
+                    }, 500);
+                }
+            }
+        }, 1000);
+    }
     
     // --- 1. Theme & Cloak Persistence ---
     const savedTheme = localStorage.getItem('selectedTheme');
